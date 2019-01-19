@@ -1,5 +1,12 @@
 Shin Colle
 ==========
+*This is a incomplete branch of shincolle 1.12.2*  
+
+I'm learning Minecraft mod developing through this project.  
+trying to finish adaption to forge-1.12.2  
+**DO NOT distribute**  
+
+Original readme:  
 Shinkeiseikan Collection
 
 Add cute ship girls for battle and decoration.
