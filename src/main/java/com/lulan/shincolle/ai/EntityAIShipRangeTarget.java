@@ -164,7 +164,7 @@ public class EntityAIShipRangeTarget extends EntityAIBase
     }
     
     @Override
-    public boolean continueExecuting()
+    public boolean shouldContinueExecuting()
     {
         Entity target = this.host.getEntityTarget();
         
@@ -178,7 +178,7 @@ public class EntityAIShipRangeTarget extends EntityAIBase
             double d0 = this.range * this.range;
 
             //超出攻擊距離, 放棄該目標
-            if (this.host2.getDistanceSqToEntity(target) > d0)
+            if (this.host2.getDistanceSq(target) > d0)
             {
                 return false;
             }

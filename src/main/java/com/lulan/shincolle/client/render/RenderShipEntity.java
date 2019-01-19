@@ -59,7 +59,7 @@ import com.lulan.shincolle.reference.Values;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -564,7 +564,7 @@ public class RenderShipEntity extends RenderBasic
 	@Override
     protected void renderLeash(EntityLiving host, double x, double y, double z, float yaw, float parTick)
     {
-        Entity entity = host.getLeashedToEntity();
+        Entity entity = host.getLeashHolder();
         float[] leashHeight = getLeashHeight();
         
         if (entity != null)
@@ -598,7 +598,7 @@ public class RenderShipEntity extends RenderBasic
         	}
             
             Tessellator tessellator = Tessellator.getInstance();
-            VertexBuffer vertexbuffer = tessellator.getBuffer();
+            BufferBuilder vertexbuffer = tessellator.getBuffer();
             double d3 = this.interp((double)entity.prevRotationYaw, (double)entity.rotationYaw, (double)(parTick * 0.5F)) * 0.01745329238474369D;
             double d4 = this.interp((double)entity.prevRotationPitch, (double)entity.rotationPitch, (double)(parTick * 0.5F)) * 0.01745329238474369D;
             double d5 = Math.cos(d3);

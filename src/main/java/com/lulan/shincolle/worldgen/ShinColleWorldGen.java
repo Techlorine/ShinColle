@@ -8,7 +8,6 @@ import com.lulan.shincolle.init.ModBlocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -23,7 +22,7 @@ public class ShinColleWorldGen implements IWorldGenerator
 	
 	//維度判定
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
+	public void generate(Random random, int chunkX, int chunkZ, World world, net.minecraft.world.gen.IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider)
 	{
 		//依照維度id呼叫不同生成方法
@@ -59,7 +58,7 @@ public class ShinColleWorldGen implements IWorldGenerator
 		
 		Biome biome = world.getBiomeForCoordsBody(new BlockPos(blockX, 0, blockZ));
 		
-		if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.OCEAN))
+		if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN))
 		{
 			spawnN *= 3;
 		}
@@ -87,7 +86,7 @@ public class ShinColleWorldGen implements IWorldGenerator
 	{
 		Biome biome = world.getBiomeForCoordsBody(new BlockPos(x, 0, z));
 		
-		if(BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.OCEAN))
+		if(BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN))
 		{
 			genPolyGravel = new WorldGenPolyGravel(2 + rand.nextInt(2));
 			int posX, posY, posZ = 0;
@@ -105,6 +104,7 @@ public class ShinColleWorldGen implements IWorldGenerator
 	private void generateNether(World world, Random rand, int x, int z) {}
 	
 	private void generateEnd(World world, Random rand, int x, int z) {}
-	
+
+
 	
 }

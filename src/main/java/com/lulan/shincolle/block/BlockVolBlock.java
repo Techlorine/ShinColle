@@ -4,7 +4,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 public class BlockVolBlock extends BasicBlock
@@ -23,8 +22,6 @@ public class BlockVolBlock extends BasicBlock
 	    this.setLightLevel(1F);
 	    this.setResistance(200F);
 	    
-        GameRegistry.register(this);
-        GameRegistry.register(new ItemBlock(this), this.getRegistryName());
 	}
 	
 	@Override

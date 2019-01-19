@@ -108,7 +108,7 @@ public class ContainerLargeShipyard extends Container
             }
 
             //如果物品都放完了, 則設成null清空該物品
-            if (orgStack.stackSize <= 0)
+            if (orgStack.getCount() <= 0)
             {
                 slot.putStack(null);
             }
@@ -135,38 +135,38 @@ public class ContainerLargeShipyard extends Container
 
             if (this.guiBuildType != this.tile.getBuildType())
             {  	//更新建造類型
-            	tileListener.sendProgressBarUpdate(this, 0, this.tile.getBuildType());
+            	tileListener.sendWindowProperty(this, 0, this.tile.getBuildType());  //TODO sendPBU->sendWP
             }
             
             if (this.guiSelectMat != this.tile.getSelectMat())
             {  	//更新資材選擇
-            	tileListener.sendProgressBarUpdate(this, 1, this.tile.getSelectMat());
+            	tileListener.sendWindowProperty(this, 1, this.tile.getSelectMat());
             }
             
             if (this.guiInvMode != this.tile.getInvMode())
             {	//更新inv mode
-            	tileListener.sendProgressBarUpdate(this, 2, this.tile.getInvMode());
+            	tileListener.sendWindowProperty(this, 2, this.tile.getInvMode());
                 
             }
             
             if (this.guiMatBuild[0] != this.tile.getMatBuild(0))
             {	//更新MatBuild材料量0
-            	tileListener.sendProgressBarUpdate(this, 3, this.tile.getMatBuild(0));
+            	tileListener.sendWindowProperty(this, 3, this.tile.getMatBuild(0));
             }
             
             if (this.guiMatBuild[1] != this.tile.getMatBuild(1))
             {	//更新MatBuild材料量1
-            	tileListener.sendProgressBarUpdate(this, 4, this.tile.getMatBuild(1));
+            	tileListener.sendWindowProperty(this, 4, this.tile.getMatBuild(1));
             }
             
             if (this.guiMatBuild[2] != this.tile.getMatBuild(2))
             {	//更新MatBuild材料量2
-            	tileListener.sendProgressBarUpdate(this, 5, this.tile.getMatBuild(2));
+            	tileListener.sendWindowProperty(this, 5, this.tile.getMatBuild(2));
             }
             
             if (this.guiMatBuild[3] != this.tile.getMatBuild(3))
             {	//更新MatBuild材料量3
-            	tileListener.sendProgressBarUpdate(this, 6, this.tile.getMatBuild(3));
+            	tileListener.sendWindowProperty(this, 6, this.tile.getMatBuild(3));
             }
 
             //燃料值: 用自訂封包更新

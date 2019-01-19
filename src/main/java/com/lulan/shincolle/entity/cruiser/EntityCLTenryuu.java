@@ -144,7 +144,7 @@ public class EntityCLTenryuu extends BasicEntityShipSmall
   				{
   					//apply buff to owner
   					EntityPlayer player = EntityHelper.getEntityPlayerByUID(this.getPlayerUID());
-  	  				if (player != null && getDistanceSqToEntity(player) < 256D)
+  	  				if (player != null && getDistanceSq(player) < 256D)
   	  				{
   	  					//potion effect: id, time, level
   	  	  	  			player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION , 100+getStateMinor(ID.M.ShipLevel), 0, false, false));
@@ -178,7 +178,7 @@ public class EntityCLTenryuu extends BasicEntityShipSmall
 			//draw movement blur
 			else if (this.StateTimer[ID.T.AttackTime3] == 3)
 			{
-				this.applyParticleAtTarget(5, null, new Dist4d(this.skillMotion.xCoord, this.skillMotion.yCoord, this.skillMotion.zCoord, 1D));
+				this.applyParticleAtTarget(5, null, new Dist4d(this.skillMotion.x, this.skillMotion.y, this.skillMotion.z, 1D));
 			
 				//apply final attack sound
 				if (this.StateEmotion[ID.S.Phase] == 3)
@@ -191,9 +191,9 @@ public class EntityCLTenryuu extends BasicEntityShipSmall
 			if (this.StateTimer[ID.T.AttackTime3] <= 7 && this.StateTimer[ID.T.AttackTime3] >= 0)
 			{
 				//apply motion
-				this.motionX = this.skillMotion.xCoord;
-				this.motionY = this.skillMotion.yCoord;
-				this.motionZ = this.skillMotion.zCoord;
+				this.motionX = this.skillMotion.x;
+				this.motionY = this.skillMotion.y;
+				this.motionZ = this.skillMotion.z;
 				
 				//attack on colliding
 				this.damageNearbyEntity();
@@ -352,7 +352,7 @@ public class EntityCLTenryuu extends BasicEntityShipSmall
 		else
 		{
 			//if target dead or too far away, find new target
-			if (!target.isEntityAlive() || target.getDistanceSqToEntity(this) > (this.getAttrs().getAttackRange() * this.getAttrs().getAttackRange()))
+			if (!target.isEntityAlive() || target.getDistanceSq(this) > (this.getAttrs().getAttackRange() * this.getAttrs().getAttackRange()))
 			{
 				if (this.remainAttack > 0)
 				{
@@ -386,7 +386,7 @@ public class EntityCLTenryuu extends BasicEntityShipSmall
 		this.skillMotion = this.skillMotion.scale(-1.25D);
 		
 		//calc rotation
-		float[] degree = CalcHelper.getLookDegree(this.skillMotion.xCoord, this.skillMotion.yCoord, this.skillMotion.zCoord, true);
+		float[] degree = CalcHelper.getLookDegree(this.skillMotion.x, this.skillMotion.y, this.skillMotion.z, true);
 		this.rotationYaw = degree[0];
 		this.rotationYawHead = degree[0];
 		
@@ -408,7 +408,7 @@ public class EntityCLTenryuu extends BasicEntityShipSmall
 		double dist = this.getDistanceSqToCenter(pos);
 		
 		//calc motion
-		this.skillMotion = new Vec3d(0D, Math.abs(vecpos.yCoord - target.posY) * -0.25D, 0D);
+		this.skillMotion = new Vec3d(0D, Math.abs(vecpos.y - target.posY) * -0.25D, 0D);
 		
 		//apply teleport
 		EntityHelper.applyTeleport(this, dist, vecpos);
@@ -583,7 +583,7 @@ public class EntityCLTenryuu extends BasicEntityShipSmall
   		case 4:  //heavy aircraft
   		break;
   		case 5:  //high speed movement
-  			CommonProxy.channelP.sendToAllAround(new S2CSpawnParticle(this, 44, posX+skillMotion.xCoord*2D, posY+height*0.4D+skillMotion.yCoord*2.5D, posZ+skillMotion.zCoord*2D, distVec.x, distVec.y, distVec.z, false), point);
+  			CommonProxy.channelP.sendToAllAround(new S2CSpawnParticle(this, 44, posX+skillMotion.x*2D, posY+height*0.4D+skillMotion.y*2.5D, posZ+skillMotion.z*2D, distVec.x, distVec.y, distVec.z, false), point);
 		break;
 		default: //melee
     		CommonProxy.channelP.sendToAllAround(new S2CSpawnParticle(target, 1, false), point);

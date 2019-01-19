@@ -20,13 +20,12 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -209,7 +208,7 @@ public class TileMultiGrudgeHeavy extends BasicTileMulti implements ITileLiquidF
 		else if (stack != null)
 		{
 			//if item is IFluidContainerItem (1.7.10) or IFluidHandler (1.10.2)
-			if (stack.getItem() instanceof IFluidContainerItem ||
+			if (stack.getItem() instanceof IFluidHandlerItem ||
 				stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP))
 			{
 				if (this.itemHandler.getStackInSlot(slot) != null) return false;
@@ -235,10 +234,10 @@ public class TileMultiGrudgeHeavy extends BasicTileMulti implements ITileLiquidF
 			
 			/** for fluid container, empty container will always be extracted */
 			//is IFluidContainerItem (1.7.10)
-			if (stack.getItem() instanceof IFluidContainerItem)
+			if (stack.getItem() instanceof IFluidHandlerItem)
 			{
-				IFluidContainerItem container = (IFluidContainerItem) stack.getItem();
-				FluidStack fluid = container.getFluid(stack);
+				IFluidHandlerItem container = (IFluidHandlerItem) stack.getItem();
+				FluidStack fluid = container.getTankProperties()[0].getContents();
 				
 				if (fluid == null || fluid.amount < 1000) return true;
 			}
@@ -257,7 +256,7 @@ public class TileMultiGrudgeHeavy extends BasicTileMulti implements ITileLiquidF
 					stack.getItem() instanceof BasicEquip ||
 					TileEntityHelper.getItemFuelValue(stack) > 0) return false;
 				
-				//check 1.7.10 FluidContainerRegistry
+			/*	//check 1.7.10 FluidContainerRegistry
 				FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(stack);
 				
 				//fluid empty or not fluid container
@@ -269,7 +268,7 @@ public class TileMultiGrudgeHeavy extends BasicTileMulti implements ITileLiquidF
 				else if (fluid.amount < 1000)
 				{
 					return true;
-				}
+				}    */
 			}
 		}
 		
@@ -356,9 +355,9 @@ public class TileMultiGrudgeHeavy extends BasicTileMulti implements ITileLiquidF
 					//add material
 					if (LargeRecipes.addMaterialStock(this, item))
 					{
-						item.stackSize--;
+						item.shrink(1);
 						
-						if (item.stackSize == 0)
+						if (item.getCount() == 0)
 						{
 							itemHandler.setStackInSlot(i, null);
 						}
@@ -415,10 +414,10 @@ public class TileMultiGrudgeHeavy extends BasicTileMulti implements ITileLiquidF
 					
 					if (item != null && item.getItem() == ModItems.InstantConMat)
 					{
-						item.stackSize--;
+						item.shrink(1);
 						this.powerConsumed += POWERINST;
 						
-						if (item.stackSize == 0)
+						if (item.getCount() == 0)
 						{
 							itemHandler.setStackInSlot(i, null);
 						}
@@ -725,6 +724,12 @@ public class TileMultiGrudgeHeavy extends BasicTileMulti implements ITileLiquidF
         AxisAlignedBB bb = new AxisAlignedBB(pos.add(-2, -3, -2), pos.add(2, 2, 2));
         return bb;
     }
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 }

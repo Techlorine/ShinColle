@@ -1,6 +1,6 @@
 package com.lulan.shincolle.item;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import com.lulan.shincolle.utility.LogHelper;
 
 /**meta:
  * 0: abyssium ingot
@@ -19,8 +19,7 @@ public class AbyssMetal extends BasicItem implements IShipResourceItem, IShipFoo
 		this.setUnlocalizedName(NAME);
 		this.setRegistryName(NAME);
         this.setHasSubtypes(true);
-        
-        GameRegistry.register(this);
+        LogHelper.info("TEST-TECHLORINE:REGOK");
 	}
 	
 	@Override

@@ -108,7 +108,7 @@ public class ContainerCrane extends Container
                 		if (this.tile.getShip() != null) this.tile.getShip().sendSyncPacketTimer(0);
                 	break;
             		default:	//使用官方方法更新
-                    	listener.sendProgressBarUpdate(this, j, temp);
+                    	listener.sendWindowProperty(this, j, temp);  //TODO T3CH-property?
             		break;
                 	}
             	}
@@ -147,7 +147,7 @@ public class ContainerCrane extends Container
         		if (key == 1)
         		{
             		ItemStack itemstack2 = itemstack.copy();
-            		itemstack2.stackSize = 1;
+            		itemstack2.setCount(1);
             		slot.putStack(itemstack2);
             		tile.setItemMode(id, true);
         		}
@@ -156,15 +156,15 @@ public class ContainerCrane extends Container
         		{
         			ItemStack oldSlot = slot.getStack();
             		ItemStack itemstack2 = itemstack.copy();
-            		int size = itemstack.stackSize;
+            		int size = itemstack.getCount();
             		
             		//if same item, add stack size
             		if (ItemStack.areItemsEqual(itemstack2, oldSlot))
             		{
-            			size += oldSlot.stackSize;
+            			size += oldSlot.getCount();
             		}
             		
-            		itemstack2.stackSize = size;
+            		itemstack2.setCount(size);
             		slot.putStack(itemstack2);
             		tile.setItemMode(id, false);
         		}

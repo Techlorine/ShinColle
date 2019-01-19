@@ -664,7 +664,7 @@ public class PacketHelper
 				{
 					if (tile2.getStackInSlot(i) != null)
 					{
-						getMat[i] = tile2.getStackInSlot(i).stackSize;
+						getMat[i] = tile2.getStackInSlot(i).getCount();
 					}
 				}
 				
@@ -796,7 +796,7 @@ public class PacketHelper
         else
         {
         	buf.writeShort(Item.getIdFromItem(stack.getItem()));
-        	buf.writeByte(stack.stackSize);
+        	buf.writeByte(stack.getCount());
         	buf.writeShort(stack.getMetadata());
             NBTTagCompound nbttagcompound = null;
 

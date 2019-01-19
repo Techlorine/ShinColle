@@ -38,7 +38,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -61,9 +60,6 @@ public class BlockGrudgeHeavy extends BasicBlockMulti
 	    this.setSoundType(SoundType.SAND);
 	    this.setDefaultState(this.blockState.getBaseState().withProperty(BlockLiquid.LEVEL, 15));
 	    
-        GameRegistry.register(this);
-        GameRegistry.register(new ItemBlockGrudgeHeavy(this), this.getRegistryName());
-        GameRegistry.registerTileEntity(TileMultiGrudgeHeavy.class, TILENAME);
 
 	}
 	
@@ -252,7 +248,7 @@ public class BlockGrudgeHeavy extends BasicBlockMulti
     }
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack item, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		//sync player UID while right click
 		if (!world.isRemote)
@@ -265,7 +261,7 @@ public class BlockGrudgeHeavy extends BasicBlockMulti
 			}
 		}
 		
-		return super.onBlockActivated(world, pos, state, player, hand, item, side, hitX, hitY, hitZ);
+		return super.onBlockActivated(world, pos, state, player, hand, side, hitX, hitY, hitZ);
 	}
 	
 	

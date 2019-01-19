@@ -26,6 +26,7 @@ abstract public class BasicBlockContainer extends BasicBlock implements ITileEnt
 {
 	
 	
+	
 	public BasicBlockContainer()
 	{
 		this(Material.ROCK);
@@ -39,7 +40,8 @@ abstract public class BasicBlockContainer extends BasicBlock implements ITileEnt
 	public BasicBlockContainer(Material material, MapColor color)
     {
         super(material, color);
-        this.isBlockContainer = true;
+        this.hasTileEntity = true;  
+        
     }
 	
 	//new tile entity instance in child class 
@@ -83,7 +85,7 @@ abstract public class BasicBlockContainer extends BasicBlock implements ITileEnt
 	 * 參數: world,方塊x,y,z,玩家,玩家面向,玩家點到的x,y,z
 	 */	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack item, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side , float hitX, float hitY, float hitZ)
 	{
 		//client端: 只需要收到true
         if (world.isRemote)

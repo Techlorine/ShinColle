@@ -123,7 +123,7 @@ public class ContainerMorphInventory extends Container
             }
 
             //如果物品都放完了, 則設成null清空該物品
-            if (itemstack1.stackSize <= 0)
+            if (itemstack1.getCount() <= 0)
             {
                 slot.putStack((ItemStack)null);
             }
@@ -133,13 +133,13 @@ public class ContainerMorphInventory extends Container
             }
 
             //如果itemstack的數量跟原先的數量相同, 表示都不能移動物品
-            if (itemstack1.stackSize == itemstack.stackSize)
+            if (itemstack1.getCount() == itemstack.getCount())
             {
                 return null;
             }
             
             //最後再發送一次slot update
-            slot.onPickupFromSlot(player, itemstack1);
+            slot.onTake(player, itemstack1);
         }
         
         return itemstack;	//物品移動完成, 回傳剩下的物品
@@ -196,7 +196,7 @@ public class ContainerMorphInventory extends Container
                 		update = true;
                 	break;
             		default:	//使用vanilla方法更新, 此數值最大僅能以short發送
-                    	listener.sendProgressBarUpdate(this, j, temp);
+                    	listener.sendWindowProperty(this, j, temp);
             		break;
                 	}
             	}

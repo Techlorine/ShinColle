@@ -92,7 +92,7 @@ public class ContainerDesk extends Container
 	            
 	            if (this.allyCD != this.capa.getPlayerTeamCooldownInSec())
 	            {
-	            	listener.sendProgressBarUpdate(this, 0, this.capa.getPlayerTeamCooldownInSec());
+	            	listener.sendWindowProperty(this, 0, this.capa.getPlayerTeamCooldownInSec());
 	            }
 	            
 	            for (int j = 0; j < this.lenTemp; j++)
@@ -102,7 +102,7 @@ public class ContainerDesk extends Container
 	            	//有部份數值需要用自訂封包來發送更新
 	            	if (this.valueTemp[j] != temp)
 	            	{
-	                    listener.sendProgressBarUpdate(this, j + 1, temp);
+	                    listener.sendWindowProperty(this, j + 1, temp);
 	            	}
 	            }//end for all value temp
 	        }//end for all listener

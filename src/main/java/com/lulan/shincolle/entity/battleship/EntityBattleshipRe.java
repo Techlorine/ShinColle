@@ -107,7 +107,7 @@ public class EntityBattleshipRe extends BasicEntityShipCV
   				//add aura to master
   				EntityPlayer player = EntityHelper.getEntityPlayerByUID(this.getPlayerUID());
   				if (getStateFlag(ID.F.IsMarried) && getStateFlag(ID.F.UseRingEffect) &&
-  					getStateMinor(ID.M.NumGrudge) > 0 && player != null && getDistanceSqToEntity(player) < 256D)
+  					getStateMinor(ID.M.NumGrudge) > 0 && player != null && getDistanceSq(player) < 256D)
   				{
   					//potion effect: id, time, level
   	  	  			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE , 50+getStateMinor(ID.M.ShipLevel), getStateMinor(ID.M.ShipLevel) / 50, false, false));
@@ -138,7 +138,7 @@ public class EntityBattleshipRe extends BasicEntityShipCV
         		}
         		else
         		{
-        			float distPush = this.getDistanceToEntity(this.targetPush);
+        			float distPush = this.getDistance(this.targetPush);
         			
             		if (distPush <= 2.5F)
             		{
@@ -159,7 +159,7 @@ public class EntityBattleshipRe extends BasicEntityShipCV
             			//每32 tick找一次路徑
                 		if (this.ticksExisted % 32 == 0)
                 		{
-                			this.getShipNavigate().tryMoveToEntityLiving(this.targetPush, 1D);
+                			this.getShipNavigate().tryMoveToEntityLiving(this.targetPush, 1D);  //TODO tryMoveLiving->
                 		}
             		}
         		}

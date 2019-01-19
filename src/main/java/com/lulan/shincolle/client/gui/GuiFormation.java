@@ -162,7 +162,7 @@ public class GuiFormation extends GuiContainer
 		super.initGui();
 		
         //textField: font, x, y, width, height
-        this.textField = new GuiTextField(1, this.fontRendererObj, this.guiLeft + 100, this.guiTop + 180, 150, 12);
+        this.textField = new GuiTextField(1, this.fontRenderer, this.guiLeft + 100, this.guiTop + 180, 150, 12);
         this.textField.setTextColor(Enums.EnumColors.YELLOW.getValue());					//點選文字框時文字顏色
         this.textField.setDisabledTextColour(-1);			//無點選文字框時文字顏色
         this.textField.setEnableBackgroundDrawing(true);	//畫出文字框背景
@@ -172,18 +172,18 @@ public class GuiFormation extends GuiContainer
         this.unitNameState = -1;
         
 		//get max string length
-		strLen = fontRendererObj.getStringWidth(attrTotalFP);
-		int temp = fontRendererObj.getStringWidth(attrATKL);
+		strLen = fontRenderer.getStringWidth(attrTotalFP);
+		int temp = fontRenderer.getStringWidth(attrATKL);
 		if(temp > strLen) strLen = temp;
-		temp = fontRendererObj.getStringWidth(attrATKH);
+		temp = fontRenderer.getStringWidth(attrATKH);
 		if(temp > strLen) strLen = temp;
-		temp = fontRendererObj.getStringWidth(attrAIRL);
+		temp = fontRenderer.getStringWidth(attrAIRL);
 		if(temp > strLen) strLen = temp;
-		temp = fontRendererObj.getStringWidth(attrAIRH);
+		temp = fontRenderer.getStringWidth(attrAIRH);
 		if(temp > strLen) strLen = temp;
-		temp = fontRendererObj.getStringWidth(attrAA);
+		temp = fontRenderer.getStringWidth(attrAA);
 		if(temp > strLen) strLen = temp;
-		temp = fontRendererObj.getStringWidth(attrASM);
+		temp = fontRenderer.getStringWidth(attrASM);
 		if(temp > strLen) strLen = temp;
     }
 	
@@ -482,7 +482,7 @@ public class GuiFormation extends GuiContainer
 				}
 			}
 			
-			this.drawHoveringText(mouseoverList, mx, my+10, this.fontRendererObj);
+			this.drawHoveringText(mouseoverList, mx, my+10, this.fontRenderer);
 		}
 		
 		//draw total damage
@@ -497,7 +497,7 @@ public class GuiFormation extends GuiContainer
 			mouseoverList.add(attrAA);
 			mouseoverList.add(attrASM);
 			
-			this.drawHoveringText(mouseoverList, mx, my+10, this.fontRendererObj);
+			this.drawHoveringText(mouseoverList, mx, my+10, this.fontRenderer);
 			
 			mouseoverList.clear();
 			mouseoverList.add("");
@@ -508,7 +508,7 @@ public class GuiFormation extends GuiContainer
 			mouseoverList.add(this.totalFPAA);
 			mouseoverList.add(this.totalFPASM);
 			
-			this.drawHoveringText(mouseoverList, mx+strLen+6, my+10, this.fontRendererObj);
+			this.drawHoveringText(mouseoverList, mx+strLen+6, my+10, this.fontRenderer);
 		}
 	}
 
@@ -520,13 +520,13 @@ public class GuiFormation extends GuiContainer
 		if (this.tickWaitSync > 0)
 		{
 			String str = String.format("%.1f", this.tickWaitSync * 0.05F);
-			fontRendererObj.drawString(str, 190, 171, Enums.EnumColors.YELLOW.getValue());
+			fontRenderer.drawString(str, 190, 171, Enums.EnumColors.YELLOW.getValue());
 		}
 		
 		//draw unit name
 		if (this.strUnitName != null)
 		{
-			fontRendererObj.drawStringWithShadow(this.strUnitName, 100, 182, Enums.EnumColors.YELLOW.getValue());
+			fontRenderer.drawStringWithShadow(this.strUnitName, 100, 182, Enums.EnumColors.YELLOW.getValue());
 		}
 		
 		//draw string
@@ -891,8 +891,8 @@ public class GuiFormation extends GuiContainer
 		int len = 0;
 		
 		//draw button text
-		len = (int) (this.fontRendererObj.getStringWidth(strRadar) * 0.5F);
-		fontRendererObj.drawStringWithShadow(strRadar, 70-len, 182, Enums.EnumColors.YELLOW.getValue());
+		len = (int) (this.fontRenderer.getStringWidth(strRadar) * 0.5F);
+		fontRenderer.drawStringWithShadow(strRadar, 70-len, 182, Enums.EnumColors.YELLOW.getValue());
 		
 		//draw ship name
     	if (this.capa != null)
@@ -911,7 +911,7 @@ public class GuiFormation extends GuiContainer
         			if (shipList[i] != null)
         			{
         				//draw name
-        				fontRendererObj.drawString(shipName[i], 210, texty, Enums.EnumColors.WHITE.getValue());
+        				fontRenderer.drawString(shipName[i], 210, texty, Enums.EnumColors.WHITE.getValue());
         				texty += 14;
         				
         				//draw pos
@@ -919,13 +919,13 @@ public class GuiFormation extends GuiContainer
         					  shipList[i].getLevel() + "   " + TextFormatting.GOLD +
         					  (int)shipList[i].getHealth() + " / " + TextFormatting.RED +
         					  (int)shipList[i].getMaxHealth();
-        				fontRendererObj.drawString(str, 195, texty, 0);
+        				fontRenderer.drawString(str, 195, texty, 0);
         				texty += 22;
         			}
         			else
         			{
         				str = strNoSig + TextFormatting.GRAY + " UID: " + this.capa.getSID(this.capa.getCurrentTeamID(), i);
-        				fontRendererObj.drawString(str, 195, texty, 0);
+        				fontRenderer.drawString(str, 195, texty, 0);
         				texty += 36;
         			}
         		}
@@ -933,32 +933,32 @@ public class GuiFormation extends GuiContainer
     		
     		//draw formation name
     		str = TextFormatting.YELLOW+I18n.format("gui.shincolle:formation.format"+this.formatClicked);
-    		len = (int) (fontRendererObj.getStringWidth(str) * 0.5F);
-    		fontRendererObj.drawString(str, 115-len, 18, Enums.EnumColors.WHITE.getValue());
+    		len = (int) (fontRenderer.getStringWidth(str) * 0.5F);
+    		fontRenderer.drawString(str, 115-len, 18, Enums.EnumColors.WHITE.getValue());
     		
     		str = TextFormatting.LIGHT_PURPLE+strPos+" "+TextFormatting.WHITE+(this.listClicked+1);
-    		len = (int) (fontRendererObj.getStringWidth(str) * 0.5F);
-    		fontRendererObj.drawString(str, 115-len, 30, Enums.EnumColors.WHITE.getValue());
+    		len = (int) (fontRenderer.getStringWidth(str) * 0.5F);
+    		fontRenderer.drawString(str, 115-len, 30, Enums.EnumColors.WHITE.getValue());
     		
     		//draw attribute text
-    		fontRendererObj.drawStringWithShadow(attrATKL, 12, 60, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrATKH, 12, 80, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrAIRL, 12, 100, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrAIRH, 12, 120, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrSPD, 12, 140, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrHIT, 12, 160, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrCRI, 69, 60, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrDHIT, 69, 80, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrTHIT, 69, 100, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrMISS, 69, 120, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrAA, 69, 140, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrASM, 69, 160, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrDEF, 126, 60, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrDODGE, 126, 80, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrGRUDGE, 126, 100, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrHPRES, 126, 120, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrKB, 126, 140, Enums.EnumColors.WHITE.getValue());
-    		fontRendererObj.drawStringWithShadow(attrMOV, 126, 160, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrATKL, 12, 60, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrATKH, 12, 80, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrAIRL, 12, 100, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrAIRH, 12, 120, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrSPD, 12, 140, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrHIT, 12, 160, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrCRI, 69, 60, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrDHIT, 69, 80, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrTHIT, 69, 100, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrMISS, 69, 120, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrAA, 69, 140, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrASM, 69, 160, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrDEF, 126, 60, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrDODGE, 126, 80, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrGRUDGE, 126, 100, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrHPRES, 126, 120, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrKB, 126, 140, Enums.EnumColors.WHITE.getValue());
+    		fontRenderer.drawStringWithShadow(attrMOV, 126, 160, Enums.EnumColors.WHITE.getValue());
     		
     		GlStateManager.popMatrix();
 		}//draw ship name

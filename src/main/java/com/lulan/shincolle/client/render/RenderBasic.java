@@ -86,7 +86,7 @@ abstract public class RenderBasic extends RenderLiving<EntityLiving>
     	super.doRender(entity, x, y, z, yaw, parTick);
     	
     	//reset light
-    	int j = entity.getBrightnessForRender(parTick);
+    	int j = entity.getBrightnessForRender();  //TODO Remove param parTick
         int k = j % 65536;
         int l = j / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)k, (float)l);
@@ -165,7 +165,7 @@ abstract public class RenderBasic extends RenderLiving<EntityLiving>
             float f8 = host.ticksExisted + parTick;
             this.applyRotations(host, f8, f, parTick);
             GlStateManager.translate((float)entity.posX, (float)entity.posY, (float)entity.posZ);
-            GlStateManager.scale((float)mm.scale.xCoord, (float)mm.scale.yCoord, (float)mm.scale.zCoord);
+            GlStateManager.scale((float)mm.scale.x, (float)mm.scale.y, (float)mm.scale.z);
             GlStateManager.rotate(mm.rotX, 1F, 0F, 0F);
             GlStateManager.rotate(mm.rotY, 0F, 1F, 0F);
             GlStateManager.rotate(mm.rotZ, 0F, 0F, 1F);
@@ -257,7 +257,7 @@ abstract public class RenderBasic extends RenderLiving<EntityLiving>
     @Override
     protected boolean setBrightness(EntityLiving entity, float ptick, boolean combineTextures)
     {
-        float f = entity.getBrightness(ptick);
+        float f = entity.getBrightness();  //TODO Also rm param
         int i = this.getColorMultiplier(entity, f, ptick);
         boolean flag = (i >> 24 & 255) > 0;
         boolean flag1 = entity.hurtTime > 0;

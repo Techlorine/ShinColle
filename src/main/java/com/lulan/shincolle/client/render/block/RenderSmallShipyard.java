@@ -27,7 +27,7 @@ public class RenderSmallShipyard extends TileEntitySpecialRenderer<BasicTileEnti
 	}
 	
 	@Override
-	public void renderTileEntityAt(BasicTileEntity tile, double x, double y, double z, float partick, int deststage)
+	public void render(BasicTileEntity tile, double x, double y, double z, float partick, int deststage, float alpha)
 	{
 		//get blockstate: get real meta if tile exist in world, or get meta = -1
 		int meta = tile.getRenderMetadata();

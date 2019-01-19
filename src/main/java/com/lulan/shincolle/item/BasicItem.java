@@ -1,16 +1,16 @@
 package com.lulan.shincolle.item;
 
-import java.util.List;
-
 import com.lulan.shincolle.block.ICustomModels;
 import com.lulan.shincolle.creativetab.CreativeTabSC;
 import com.lulan.shincolle.reference.Reference;
+import com.lulan.shincolle.utility.LogHelper;
 
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,22 +37,20 @@ abstract public class BasicItem extends Item implements ICustomModels
 	
 	/** add item to creative tabs according to type value */
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List list)
-	{
-		if (item == null) return;
-		
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list)
+    {
 		if (getTypes() <= 1)
 		{
-			list.add(new ItemStack(item));
+			list.add(new ItemStack(this));
 		}
 		else
 		{
 			for (int i = 0; i < getTypes(); i++)
 			{
-				list.add(new ItemStack(item, 1, i));
+				list.add(new ItemStack(this, 1, i));
 			}
 		}
-	}
+    }
 	
 	//name設定用方法: 去掉.之前的字串 以便另外串上mod名稱形成的字串
 	protected String getUnwrappedUnlocalizedName(String unlocalizedName)
@@ -65,7 +63,7 @@ abstract public class BasicItem extends Item implements ICustomModels
 	@Override
 	public String getUnlocalizedName()
 	{
-		return String.format("item.%s%s", Reference.MOD_ID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("item.%s%s", ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));  //TODDDO
 	}
 	
 	//同getUnlocalizedName() 此為加上itemstack版本
@@ -77,11 +75,11 @@ abstract public class BasicItem extends Item implements ICustomModels
 		
 		if (meta > 0)
 		{
-			return String.format("item.%s%s", Reference.MOD_ID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()) + meta);
+			return String.format("item.%s%s", ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()) + meta);
 		}
 		else
 		{
-			return String.format("item.%s%s", Reference.MOD_ID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+			return String.format("item.%s%s", ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 		}		
 	}
 	
@@ -106,7 +104,8 @@ abstract public class BasicItem extends Item implements ICustomModels
     		//宣告並設定textures位置
     		for (int i = 0; i < getTypes(); i++)
     		{
-    			models[i] = new ModelResourceLocation(getRegistryName() + String.valueOf(i), "inventory");
+    			LogHelper.info(getRegistryName());
+    			models[i] = new ModelResourceLocation(Reference.MOD_ID + ":" + getRegistryName() + String.valueOf(i), "inventory");
     		}
 
     		//登錄全部textures
@@ -121,8 +120,9 @@ abstract public class BasicItem extends Item implements ICustomModels
 		//meta值只有一個 = texture只有一個
 		else
 		{
-	        ModelLoader.setCustomModelResourceLocation(
-	        		this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+			LogHelper.info(getRegistryName());
+			ModelLoader.setCustomModelResourceLocation(
+	        		this, 0, new ModelResourceLocation(Reference.MOD_ID + ":" + getRegistryName(), "inventory"));
 		}
 
     }

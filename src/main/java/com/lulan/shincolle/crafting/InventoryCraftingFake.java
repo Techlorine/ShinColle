@@ -1,10 +1,13 @@
 package com.lulan.shincolle.crafting;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 /**
  * fake crafting matrix for crafting simulation
@@ -14,7 +17,8 @@ public class InventoryCraftingFake extends InventoryCrafting
 {
 	
     /** List of the stacks in the crafting matrix. */
-    protected final ItemStack[] stacks;
+    protected final ItemStack[] stacks;   //TODO ARRAY -> NonNullList
+    protected final List<ItemStack> stacksL;  
     /** the width of the crafting inventory */
     protected final int width;
     protected final int height;
@@ -24,9 +28,9 @@ public class InventoryCraftingFake extends InventoryCrafting
     public InventoryCraftingFake(int width, int height)
     {
     	super(null, width, height);
-    	
         int i = width * height;
         this.stacks = new ItemStack[i];
+        this.stacksL=NonNullList.create();
         this.width = width;
         this.height = height;
     }
@@ -55,14 +59,14 @@ public class InventoryCraftingFake extends InventoryCrafting
     @Nullable
     public ItemStack removeStackFromSlot(int index)
     {
-        return ItemStackHelper.getAndRemove(this.stacks, index);
+        return ItemStackHelper.getAndRemove(this.stacksL, index);
     }
 
     @Override
     @Nullable
     public ItemStack decrStackSize(int index, int count)
     {
-        return ItemStackHelper.getAndSplit(this.stacks, index, count);
+        return ItemStackHelper.getAndSplit(this.stacksL, index, count);
     }
 
     @Override

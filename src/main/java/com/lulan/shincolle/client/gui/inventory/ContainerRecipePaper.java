@@ -80,7 +80,7 @@ public class ContainerRecipePaper extends Container
 
                 if (slot >= 0 && slot < 9)
                 {
-                    this.craftMatrix.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(itemTags));
+                    this.craftMatrix.setInventorySlotContents(slot, new ItemStack(itemTags)); //TODO loadItemStackFromNBT升格為構造函數
                 }
             }
         }
@@ -95,7 +95,8 @@ public class ContainerRecipePaper extends Container
 	@Override
     public void onCraftMatrixChanged(IInventory inventoryIn)
     {
-    	ItemStack result = CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, this.world);
+    	ItemStack result = CraftingManager.findMatchingResult(this.craftMatrix, this.world);
+    			//.findMatchingRecipe(this.craftMatrix, this.world);   //TODO Needn't to GET INSTANCE
     	this.craftResult.setInventorySlotContents(0, result);
     }
     
@@ -196,7 +197,7 @@ public class ContainerRecipePaper extends Container
         		else
         		{
         			ItemStack itemstack2 = itemstack.copy();
-            		itemstack2.stackSize = 1;
+            		itemstack2.setCount(1);
             		slot.putStack(itemstack2);
         		}
         	}

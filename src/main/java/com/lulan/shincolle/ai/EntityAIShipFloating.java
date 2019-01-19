@@ -147,7 +147,7 @@ public class EntityAIShipFloating extends EntityAIBase
 			//若守衛entity, 檢查entity距離
 			if (host.getGuardedEntity() != null)
 			{
-				double distSq = ((Entity)host).getDistanceSqToEntity(host.getGuardedEntity());
+				double distSq = ((Entity)host).getDistanceSq(host.getGuardedEntity());
 				if (distSq < fMin) return true;
 			}
 			//若守衛某地點, 則檢查與該點距離
@@ -165,7 +165,7 @@ public class EntityAIShipFloating extends EntityAIBase
 			
 			if (host.getHostEntity() != null)
 			{
-				if (host.getHostEntity().getDistanceSqToEntity((Entity)host) <= fMax) return true;
+				if (host.getHostEntity().getDistanceSq((Entity)host) <= fMax) return true;
 			}
 		}
 		

@@ -176,7 +176,7 @@ public class C2SInputPackets implements IMessage
 	//packet handle method
 	private static void handle(C2SInputPackets msg, MessageContext ctx)
 	{
-		EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+		EntityPlayerMP player = ctx.getServerHandler().player;
 		Entity entity;
 		
 		try
@@ -349,7 +349,7 @@ public class C2SInputPackets implements IMessage
 				 * waypoint pairing packet:
 				 * data: 0:playerUID, 1~3:from xyz, 4~6:to xyz
 				 */
-				EntityPlayer p = ctx.getServerHandler().playerEntity;
+				EntityPlayer p = ctx.getServerHandler().player;
 				World w = null;
 				if (p != null) w = p.world;
 				
@@ -382,7 +382,7 @@ public class C2SInputPackets implements IMessage
 				 * chest and waypoint pairing packet:
 				 * data: 0:playerUID, 1~3:waypoint xyz, 4~6:chest xyz
 				 */
-				EntityPlayer p = ctx.getServerHandler().playerEntity;
+				EntityPlayer p = ctx.getServerHandler().player;
 				World w = null;
 				if (p != null) w = p.world;
 				

@@ -493,7 +493,7 @@ public class BlockHelper
 		
 		Vec3d vec3 = viewer.getPositionEyes(duringTicks);
 	    Vec3d vec31 = viewer.getLook(duringTicks);
-	    Vec3d vec32 = vec3.addVector(vec31.xCoord * dist, vec31.yCoord * dist, vec31.zCoord * dist);
+	    Vec3d vec32 = vec3.addVector(vec31.x * dist, vec31.y * dist, vec31.z * dist);
 	    
 	    //參數: entity位置, entity視線最遠位置, 停止在液體方塊上, 忽略沒有AABB的方塊, 回傳距離內最遠的不可碰撞方塊
 	    return viewer.world.rayTraceBlocks(vec3, vec32, stopOnLiquid, ignoreBlockWithoutBoundingBox, returnLastUncollidableBlock);

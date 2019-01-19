@@ -103,7 +103,7 @@ public class EntityDestroyerHibiki extends BasicEntityShipSmall implements IShip
   	  			{
 	  				EntityPlayer player = EntityHelper.getEntityPlayerByUID(this.getPlayerUID());
 	  				if (getStateFlag(ID.F.IsMarried) && getStateFlag(ID.F.UseRingEffect) &&
-	  					getStateMinor(ID.M.NumGrudge) > 0 && player != null && getDistanceSqToEntity(player) < 256D)
+	  					getStateMinor(ID.M.NumGrudge) > 0 && player != null && getDistanceSq(player) < 256D)
 	  				{
 	  					//potion effect: id, time, level
 	  	  	  			player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST , 80+getStateMinor(ID.M.ShipLevel), getStateMinor(ID.M.ShipLevel) / 45 + 1, false, false));

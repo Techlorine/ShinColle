@@ -79,19 +79,19 @@ public class GuiLargeShipyard extends GuiContainer
 		
 //		//畫出字串 parm: string, x, y, color, (是否dropShadow)
 //		//畫出該方塊名稱, 位置: x=gui寬度的一半扣掉字串長度一半, y=6, 顏色為4210752
-//		this.fontRendererObj.drawString(conName, this.xSize / 2 - this.fontRendererObj.getStringWidth(conName) / 2, 6, EnumColors.GRAY_MIDDLE.getValue());
+//		this.fontRendererObj.drawString(conName, this.xSize / 2 - thfontRendererObj.getStringWidth(conName) / 2, 6, EnumColors.GRAY_MIDDLE.getValue());
 		
 		//畫出倒數時間
-		this.fontRendererObj.drawString(time, 176 - this.fontRendererObj.getStringWidth(time) / 2, 77, EnumColors.GRAY_MIDDLE.getValue());
+		this.fontRenderer.drawString(time, 176 - this.fontRenderer.getStringWidth(time) / 2, 77, EnumColors.GRAY_MIDDLE.getValue());
 		
 		//畫出提示訊息
 		if (tile.getPowerGoal() <= 0 && tile.getBuildType() != 0)
 		{
-			this.fontRendererObj.drawString(errorMsg1, 105 - this.fontRendererObj.getStringWidth(errorMsg1) / 2, 99, EnumColors.RED_LIGHT.getValue());
+			this.fontRenderer.drawString(errorMsg1, 105 - this.fontRenderer.getStringWidth(errorMsg1) / 2, 99, EnumColors.RED_LIGHT.getValue());
 		}
 		else if (!tile.hasPowerRemained())
 		{
-			this.fontRendererObj.drawString(errorMsg2, 105 - this.fontRendererObj.getStringWidth(errorMsg2) / 2, 99, EnumColors.RED_LIGHT.getValue());
+			this.fontRenderer.drawString(errorMsg2, 105 - this.fontRenderer.getStringWidth(errorMsg2) / 2, 99, EnumColors.RED_LIGHT.getValue());
 		}
 		
 		//畫出數字
@@ -99,27 +99,27 @@ public class GuiLargeShipyard extends GuiContainer
 		if (this.tile.getMatBuild(0) < 100) colorNum = EnumColors.RED_LIGHT.getValue();
 		else if (this.tile.getMatBuild(0) == 1000) colorNum = EnumColors.YELLOW.getValue();
 		else colorNum = EnumColors.WHITE.getValue();
-		this.fontRendererObj.drawString(matBuild0, 73 - this.fontRendererObj.getStringWidth(matBuild0) / 2, 20, colorNum);
+		this.fontRenderer.drawString(matBuild0, 73 - this.fontRenderer.getStringWidth(matBuild0) / 2, 20, colorNum);
 		
 		if (this.tile.getMatBuild(1) < 100) colorNum = EnumColors.RED_LIGHT.getValue();
 		else if (this.tile.getMatBuild(1) == 1000) colorNum = EnumColors.YELLOW.getValue();
 		else colorNum = EnumColors.WHITE.getValue();
-		this.fontRendererObj.drawString(matBuild1, 73 - this.fontRendererObj.getStringWidth(matBuild1) / 2, 39, colorNum);
+		this.fontRenderer.drawString(matBuild1, 73 - this.fontRenderer.getStringWidth(matBuild1) / 2, 39, colorNum);
 		
 		if (this.tile.getMatBuild(2) < 100) colorNum = EnumColors.RED_LIGHT.getValue();
 		else if (this.tile.getMatBuild(2) == 1000) colorNum = EnumColors.YELLOW.getValue();
 		else colorNum = EnumColors.WHITE.getValue();
-		this.fontRendererObj.drawString(matBuild2, 73 - this.fontRendererObj.getStringWidth(matBuild2) / 2, 58, colorNum);
+		this.fontRenderer.drawString(matBuild2, 73 - this.fontRenderer.getStringWidth(matBuild2) / 2, 58, colorNum);
 		
 		if (this.tile.getMatBuild(3) < 100) colorNum = EnumColors.RED_LIGHT.getValue();
 		else if (this.tile.getMatBuild(3) == 1000) colorNum = EnumColors.YELLOW.getValue();
 		else colorNum = EnumColors.WHITE.getValue();
-		this.fontRendererObj.drawString(matBuild3, 73 - this.fontRendererObj.getStringWidth(matBuild3) / 2, 77, colorNum);
+		this.fontRenderer.drawString(matBuild3, 73 - this.fontRenderer.getStringWidth(matBuild3) / 2, 77, colorNum);
 		
-		this.fontRendererObj.drawString(matStock0, 125 - this.fontRendererObj.getStringWidth(matStock0) / 2, 20, EnumColors.YELLOW.getValue());
-		this.fontRendererObj.drawString(matStock1, 125 - this.fontRendererObj.getStringWidth(matStock1) / 2, 39, EnumColors.YELLOW.getValue());
-		this.fontRendererObj.drawString(matStock2, 125 - this.fontRendererObj.getStringWidth(matStock2) / 2, 58, EnumColors.YELLOW.getValue());
-		this.fontRendererObj.drawString(matStock3, 125 - this.fontRendererObj.getStringWidth(matStock3) / 2, 77, EnumColors.YELLOW.getValue());
+		this.fontRenderer.drawString(matStock0, 125 - this.fontRenderer.getStringWidth(matStock0) / 2, 20, EnumColors.YELLOW.getValue());
+		this.fontRenderer.drawString(matStock1, 125 - this.fontRenderer.getStringWidth(matStock1) / 2, 39, EnumColors.YELLOW.getValue());
+		this.fontRenderer.drawString(matStock2, 125 - this.fontRenderer.getStringWidth(matStock2) / 2, 58, EnumColors.YELLOW.getValue());
+		this.fontRenderer.drawString(matStock3, 125 - this.fontRenderer.getStringWidth(matStock3) / 2, 77, EnumColors.YELLOW.getValue());
 	
 		handleHoveringText();
 		
@@ -221,11 +221,11 @@ public class GuiLargeShipyard extends GuiContainer
 		//畫出fuel存量 (8,19,22,84)
 		if (xMouse > 8+guiLeft && xMouse < 22+guiLeft && yMouse > 19+guiTop && yMouse < 84+guiTop)
 		{
-			List list = new ArrayList();
+			List<String> list = new ArrayList<String>();
 			String strFuel = String.valueOf(tile.getPowerRemained());
-			int strLen = this.fontRendererObj.getStringWidth(strFuel) / 2;
+			int strLen = this.fontRenderer.getStringWidth(strFuel) / 2;
 			list.add(strFuel);
-			this.drawHoveringText(list, 3-strLen, 58, this.fontRendererObj);
+			this.drawHoveringText(list, 3-strLen, 58, this.fontRenderer);
 		}	
 	}
 	

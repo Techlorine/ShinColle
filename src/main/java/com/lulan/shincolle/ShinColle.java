@@ -3,6 +3,7 @@ package com.lulan.shincolle;
 import com.lulan.shincolle.handler.ChunkLoaderHandler;
 import com.lulan.shincolle.handler.CommandHandler;
 import com.lulan.shincolle.handler.ConfigHandler;
+import com.lulan.shincolle.handler.EventHandler;
 import com.lulan.shincolle.handler.GuiHandler;
 import com.lulan.shincolle.init.ModBlocks;
 import com.lulan.shincolle.init.ModEntity;
@@ -18,7 +19,11 @@ import com.lulan.shincolle.proxy.ServerProxy;
 import com.lulan.shincolle.reference.Reference;
 import com.lulan.shincolle.utility.LogHelper;
 
+import net.minecraft.item.Item;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -27,13 +32,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 
 @Mod(modid = Reference.MOD_ID,
 	 name = Reference.MOD_NAME,
 	 version = Reference.MOD_VERSION,
-	 dependencies="required-after:Forge@[12.18.3.2185,)",
+	// dependencies="required-after:Forge@[14.23.2.2615,)",
 	 guiFactory = "com.lulan.shincolle.config.ConfigGuiFactory")
 public class ShinColle
 {
@@ -52,19 +59,18 @@ public class ShinColle
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) throws Exception
 	{		
-		//config inti
+		MinecraftForge.EVENT_BUS.register(new EventHandler());
+		//config init
 		ConfigHandler.init(event);	//load config file
-		
-		ModItems.init();
+        
+	//	ModBlocks.register(RegistryEvent.Register<ModBlocks.class>);
 
-		ModBlocks.init();
-
-		ModEntity.init();
+	//	ModEntity.init();
 		
-		ModSounds.init();
+	//	ModSounds.register();
 		
 		//render & model register
-		proxy.registerRender();
+		
 		
 		//Packet channel register (simple network)
 		proxy.registerChannel();
@@ -73,22 +79,25 @@ public class ShinColle
 		proxy.registerCapability();
 		
 		LogHelper.info("INFO: Pre-Init completed.");
+		
 	}
 	
 	/** initial: recipe/gui/worldgen init, event handler regist, create data handler, 
 	 *           request mod interact ,oreDictionary registr
 	 */
 	@Mod.EventHandler
-	public void Init(FMLInitializationEvent event)
+	public void Init(FMLInitializationEvent event) throws Exception
 	{
+		proxy.registerRender();
+		
 		//GUI register
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		
-		ModOres.oreDictRegister();
+	//	ModOres.oreDictRegister();
 		
 		ModEvents.init();
 		
-		ModRecipes.init();
+	//	ModRecipes.init();
 		
 		LogHelper.info("INFO: Init completed.");
 		
@@ -101,7 +110,7 @@ public class ShinColle
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		//world gen跟entity spawn放在postInit, 以便能讀取到其他mod的biome
-		ModWorldGen.init();
+		//TodoD ModWorldGen.init();
 		
 		//register chunk loader callback
 		ForgeChunkManager.setForcedChunkLoadingCallback(instance, new ChunkLoaderHandler());
@@ -167,5 +176,4 @@ public class ShinColle
 	    ServerProxy.saveServerFile = true;
 	}
 	
-
 }

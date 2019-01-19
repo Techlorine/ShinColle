@@ -90,11 +90,11 @@ public class EntityCATakao extends BasicEntityShipSmall
 	@Override
     public boolean attackEntityFrom(DamageSource source, float atk)
 	{
-		if (super.attackEntityFrom(source, atk) && source.getEntity() instanceof EntityLivingBase &&
-			!source.getEntity().equals(this.getHostEntity()))
+		if (super.attackEntityFrom(source, atk) && source.getTrueSource() instanceof EntityLivingBase &&
+			!source.getTrueSource().equals(this.getHostEntity()))
 		{
 			//slow attacker
-			((EntityLivingBase) source.getEntity()).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100+this.getLevel(), this.getLevel() / 100, false, false));
+			((EntityLivingBase) source.getTrueSource()).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100+this.getLevel(), this.getLevel() / 100, false, false));
 			
 			return true;
 		}

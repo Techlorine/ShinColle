@@ -86,7 +86,7 @@ public class EntitySubmHime extends BasicEntityShipSmall implements IShipInvisib
   					if (getStateFlag(ID.F.IsMarried))
   					{
   						EntityPlayerMP player = (EntityPlayerMP) EntityHelper.getEntityPlayerByUID(this.getPlayerUID());
-  	  	  				if (player != null && getDistanceSqToEntity(player) < 256D)
+  	  	  				if (player != null && getDistanceSq(player) < 256D)
   	  	  				{
   	  	  					//potion effect: id, time, level
   	  	  	  	  			player.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 80+getLevel(), 0, false, false));

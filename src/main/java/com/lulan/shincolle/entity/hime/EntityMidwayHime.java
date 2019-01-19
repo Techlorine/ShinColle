@@ -98,7 +98,7 @@ public class EntityMidwayHime extends BasicEntityShipCV
   					
   					//apply buff to owner
   					EntityPlayer player = EntityHelper.getEntityPlayerByUID(this.getPlayerUID());
-  	  				if (player != null && getDistanceSqToEntity(player) < 256D && !this.isMorph)
+  	  				if (player != null && getDistanceSq(player) < 256D && !this.isMorph)
   	  				{
   	  					//potion effect: id, time, level
   	  	  	  			player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION , 50+getStateMinor(ID.M.ShipLevel), getStateMinor(ID.M.ShipLevel) / 50, false, false));

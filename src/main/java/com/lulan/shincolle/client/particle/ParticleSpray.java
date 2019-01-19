@@ -4,7 +4,7 @@ import com.lulan.shincolle.utility.LogHelper;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -324,7 +324,7 @@ public class ParticleSpray extends Particle
     }
 
     @Override
-    public void renderParticle(VertexBuffer render, Entity entity, float ptick, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ)
+    public void renderParticle(BufferBuilder render, Entity entity, float ptick, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ)
     {
     	if (this.particleAge == 1) return;
     	
@@ -381,7 +381,7 @@ public class ParticleSpray extends Particle
             this.motionY *= 0.96D;
             this.motionZ *= 0.96D;
             
-            if (this.isCollided)
+            if (this.onGround)   //TODO isCollided->onGround???
             {
                 this.motionX *= 0.7D;
                 this.motionZ *= 0.7D;

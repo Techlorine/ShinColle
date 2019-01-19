@@ -19,7 +19,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockVolCore extends BasicBlockContainer
 {
@@ -38,9 +37,6 @@ public class BlockVolCore extends BasicBlockContainer
 	    this.setHarvestLevel("pickaxe", 0);
 	    this.setLightLevel(1F);
 	    
-        GameRegistry.register(this);
-        GameRegistry.register(new ItemBlock(this), this.getRegistryName());
-        GameRegistry.registerTileEntity(TileEntityVolCore.class, TILENAME);	    
 	}
 
 	@Override
@@ -81,7 +77,7 @@ public class BlockVolCore extends BasicBlockContainer
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack item, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		//sync player UID while right click
 		if (!world.isRemote)
@@ -94,7 +90,7 @@ public class BlockVolCore extends BasicBlockContainer
 			}
 		}
 		
-		return super.onBlockActivated(world, pos, state, player, hand, item, side, hitX, hitY, hitZ);
+		return super.onBlockActivated(world, pos, state, player, hand, side, hitX, hitY, hitZ);
 	}
 		
 		

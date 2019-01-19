@@ -67,7 +67,7 @@ public class LargeRecipes
 		}
 		else
 		{	//slot已佔用, 物品數+1
-			tile.getStackInSlot(slot).stackSize++;
+			tile.getStackInSlot(slot).grow(1);
 		}
 	}
 	
@@ -81,7 +81,7 @@ public class LargeRecipes
 			if ((tile.getStackInSlot(i) == null) ||
 				(tile.getStackInSlot(i).getItem() == item &&
 				 tile.getStackInSlot(i).getItemDamage() == meta &&
-				 tile.getStackInSlot(i).stackSize < tile.getStackInSlot(i).getMaxStackSize()))
+				 tile.getStackInSlot(i).getCount() < tile.getStackInSlot(i).getMaxStackSize()))
 			{
 				return i;
 			}
@@ -218,7 +218,7 @@ public class LargeRecipes
 						{
 							if (i != null)
 							{
-								int size = i.stackSize;
+								int size = i.getCount();
 								int meta = i.getItemDamage();
 								int[] addMats = ((IShipResourceItem)i.getItem()).getResourceValue(meta);
 								

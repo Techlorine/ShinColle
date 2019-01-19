@@ -17,6 +17,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -26,7 +28,7 @@ import net.minecraftforge.common.util.Constants;
 public class RecipeEnchantShell implements IRecipe
 {
 	
-    private static final ItemStack[] EMPTY_ITEMS = new ItemStack[9];
+    private static final NonNullList<ItemStack> EMPTY_ITEMS = NonNullList.create();  //TODO ItemStack->NonNullList  original size=9
     
     
     public RecipeEnchantShell() {}
@@ -108,7 +110,7 @@ public class RecipeEnchantShell implements IRecipe
         if (ammo != null && ammo.getItem() == ModItems.EquipAmmo &&
         	potion != null && potion.getItem() == Items.POTIONITEM)
         {
-            ItemStack ammoNew = ItemStack.copyItemStack(ammo);
+            ItemStack ammoNew = ammo.copy();
             
             //get potion effect from potion
             List<PotionEffect> elist = PotionUtils.getEffectsFromStack(potion);
@@ -182,10 +184,34 @@ public class RecipeEnchantShell implements IRecipe
         return null;
     }
 
-    public ItemStack[] getRemainingItems(InventoryCrafting inv)
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv)
     {
         return EMPTY_ITEMS;
     }
+
+	@Override
+	public IRecipe setRegistryName(ResourceLocation name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResourceLocation getRegistryName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Class<IRecipe> getRegistryType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean canFit(int width, int height) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
     
 }

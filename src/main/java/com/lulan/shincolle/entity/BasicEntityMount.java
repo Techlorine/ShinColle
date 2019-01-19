@@ -138,7 +138,7 @@ abstract public class BasicEntityMount extends EntityCreature implements IShipMo
 	//受傷音效
     @Override
     @Nullable
-    protected SoundEvent getHurtSound()
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
     {
 		if (ConfigHandler.useWakamoto && rand.nextInt(30) == 0 && this.soundHurtDelay <= 0)
 		{
@@ -216,19 +216,19 @@ abstract public class BasicEntityMount extends EntityCreature implements IShipMo
 		boolean checkDEF = true;
 		
 		//damage disabled
-		if (source == DamageSource.inWall || source == DamageSource.starve ||
-			source == DamageSource.cactus || source == DamageSource.fall)
+		if (source == DamageSource.IN_WALL || source == DamageSource.STARVE ||
+			source == DamageSource.CACTUS || source == DamageSource.FALL)
 		{
 			return false;
 		}
 		//damage ignore def value
-		else if (source == DamageSource.magic || source == DamageSource.wither ||
-				 source == DamageSource.dragonBreath)
+		else if (source == DamageSource.MAGIC || source == DamageSource.WITHER ||
+				 source == DamageSource.DRAGON_BREATH)
 		{
 			checkDEF = false;
 		}
 		//out of world
-		else if (source == DamageSource.outOfWorld)
+		else if (source == DamageSource.OUT_OF_WORLD)
 		{
 			this.setDead();
 			return false;
@@ -241,8 +241,8 @@ abstract public class BasicEntityMount extends EntityCreature implements IShipMo
   		if (this.rand.nextInt(10) == 0) this.host.randomSensitiveBody();
         
     	//若攻擊方為owner, 則直接回傳傷害, 不計def跟friendly fire
-		if (source.getEntity() instanceof EntityPlayer &&
-			TeamHelper.checkSameOwner(source.getEntity(), this))
+		if (source.getTrueSource() instanceof EntityPlayer &&
+			TeamHelper.checkSameOwner(source.getTrueSource(), this))  //TODO getTrueSource还是IMME 
 		{
 			this.host.setSitting(false);
 			return super.attackEntityFrom(source, atk);
@@ -254,9 +254,9 @@ abstract public class BasicEntityMount extends EntityCreature implements IShipMo
             return false;
         }
 		//只對entity damage類有效
-		else if (source.getEntity() != null)
+		else if (source.getTrueSource() != null)
 		{
-			Entity entity = source.getEntity();
+			Entity entity = source.getTrueSource();
 			
 			//不會對自己造成傷害, 可免疫毒/掉落/窒息等傷害 (此為自己對自己造成傷害)
 			if (entity.equals(this))
@@ -277,7 +277,7 @@ abstract public class BasicEntityMount extends EntityCreature implements IShipMo
 			}
 			
 			//進行dodge計算
-			float dist = (float) this.getDistanceSqToEntity(entity);
+			float dist = (float) this.getDistanceSq(entity);
 			
 			if (CombatHelper.canDodge(this, dist))
 			{
@@ -340,10 +340,10 @@ abstract public class BasicEntityMount extends EntityCreature implements IShipMo
     }
 	
 	@Override
-	public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, @Nullable ItemStack stack, EnumHand hand)
+	public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, EnumHand hand)
     {
 		if (hand == EnumHand.OFF_HAND) return EnumActionResult.FAIL;
-		
+		@Nullable ItemStack stack = player.getHeldItemMainhand();    //TODO active hand or main hand or XXhand to get the handler? 你*的 為什麽
 		//server side
 		if (!this.world.isRemote)
 		{
@@ -374,7 +374,7 @@ abstract public class BasicEntityMount extends EntityCreature implements IShipMo
 			if (!player.isSneaking())
 			{
 				//ride mount, only for friendly player
-				if (!TeamHelper.checkIsBanned(this, player) && this.getDistanceSqToEntity(player) < 16D)
+				if (!TeamHelper.checkIsBanned(this, player) && this.getDistanceSq(player) < 16D)
 				{
 	  	  			player.startRiding(this, true);
 	  	  			this.stateEmotion = 1;
@@ -388,7 +388,7 @@ abstract public class BasicEntityMount extends EntityCreature implements IShipMo
 					this.host.setEntitySit(!this.host.isSitting());
 					this.isJumping = false;
 			        this.getShipNavigate().clearPathEntity();
-			        this.getNavigator().clearPathEntity();
+			        this.getNavigator().clearPath();
 			        this.setAttackTarget(null);
 			        this.setEntityTarget(null);
 
@@ -747,7 +747,7 @@ abstract public class BasicEntityMount extends EntityCreature implements IShipMo
 			}
 			
 			//若水平撞到東西, 則嘗試往上擠
-			if (this.isCollidedHorizontally)
+			if (this.collidedHorizontally)
 			{
 				this.motionY += 0.4D;
 			}
@@ -1198,9 +1198,9 @@ abstract public class BasicEntityMount extends EntityCreature implements IShipMo
      * Moves the entity based on the specified heading.  Args: strafe, forward
      */
 	@Override
-    public void moveEntityWithHeading(float strafe, float forward)
+    public void travel(float strafe, float up, float forward)
 	{
-		EntityHelper.moveEntityWithHeading(this, strafe, forward);
+		EntityHelper.travel(this, strafe, 0F, forward);
     }
 	
 	@Override

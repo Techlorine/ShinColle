@@ -576,7 +576,7 @@ public class ShipSkillHandler
 			{
 				target = EntityHelper.getEntityByID(data[1], player.world.provider.getDimension(), false);
 				
-				if (target != null && ship.getDistanceSqToEntity(target) > rangeSq)
+				if (target != null && ship.getDistanceSq(target) > rangeSq)
 				{
 					target = null;
 				}

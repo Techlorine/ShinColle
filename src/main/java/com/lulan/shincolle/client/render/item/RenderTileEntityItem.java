@@ -32,11 +32,11 @@ public class RenderTileEntityItem extends TileEntityItemStackRenderer
         //mod特製模型的tile entity
         if (block == ModBlocks.BlockSmallShipyard)
         {
-			TileEntityRendererDispatcher.instance.renderTileEntityAt(SmallShipyard, 0D, 0D, 0D, 0F);
+			TileEntityRendererDispatcher.instance.render(SmallShipyard, 0D, 0D, 0D, 0F);
         }
         else if (block == ModBlocks.BlockDesk)
         {
-			TileEntityRendererDispatcher.instance.renderTileEntityAt(Desk, 0D, 0D, 0D, 0F);
+			TileEntityRendererDispatcher.instance.render(Desk, 0D, 0D, 0D, 0F);
         }
         //其他mc的tile entity
         else

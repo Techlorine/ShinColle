@@ -25,9 +25,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidContainerItem;
+//import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -97,7 +98,7 @@ public class InventoryHelper
 			{
 				if (tempStacks[i] != null && !modeStacks[i])
 				{
-					if (targetAmount[i] < tempStacks[i].stackSize) return false;
+					if (targetAmount[i] < tempStacks[i].getCount()) return false;
 				}
 			}
 			//REMAIN MODE: all item amount must LESSER or EQUAL to temp setting
@@ -105,7 +106,7 @@ public class InventoryHelper
 			{
 				if (tempStacks[i] != null && !modeStacks[i])
 				{
-					if (targetAmount[i] > tempStacks[i].stackSize) return false;
+					if (targetAmount[i] > tempStacks[i].getCount()) return false;
 				}
 			}
 		}
@@ -586,13 +587,13 @@ public class InventoryHelper
 						{
 							if (number > 0)
 							{
-								int minsize = Math.min(getTemp.stackSize, number);
+								int minsize = Math.min(getTemp.getCount(), number);
 								number -= minsize;
-								getTemp.stackSize -= minsize;
-								getItem.stackSize += minsize;
+								getTemp.shrink(minsize);
+								getItem.grow(minsize);
 								
 								//clear slot if size <= 0
-								if (getTemp.stackSize <= 0)
+								if (getTemp.getCount() <= 0)
 								{
 									adjChest.setInventorySlotContents(slotid, null);
 								}
@@ -614,14 +615,14 @@ public class InventoryHelper
 							//take item from chest
 							if (number > 0)
 							{
-								int minsize = Math.min(getTemp.stackSize, number);
+								int minsize = Math.min(getTemp.getCount(), number);
 								number -= minsize;
-								getTemp.stackSize -= minsize;
+								getTemp.shrink(minsize);
 								getItem = getTemp.copy();
-								getItem.stackSize = minsize;
+								getItem.setCount(minsize);
 								
 								//clear slot if size <= 0
-								if (getTemp.stackSize <= 0)
+								if (getTemp.getCount() <= 0)
 								{
 									adjChest.setInventorySlotContents(slotid, null);
 								}
@@ -647,13 +648,13 @@ public class InventoryHelper
 					{
 						if (number > 0)
 						{
-							int minsize = Math.min(getTemp.stackSize, number);
+							int minsize = Math.min(getTemp.getCount(), number);
 							number -= minsize;
-							getTemp.stackSize -= minsize;
-							getItem.stackSize += minsize;
+							getTemp.shrink(minsize);
+							getItem.grow(minsize);
 							
 							//clear slot if size <= 0
-							if (getTemp.stackSize <= 0)
+							if (getTemp.getCount() <= 0)
 							{
 								inv.setInventorySlotContents(slotid, null);
 							}
@@ -675,14 +676,14 @@ public class InventoryHelper
 						//take item from chest
 						if (number > 0)
 						{
-							int minsize = Math.min(getTemp.stackSize, number);
+							int minsize = Math.min(getTemp.getCount(), number);
 							number -= minsize;
-							getTemp.stackSize -= minsize;
+							getTemp.shrink(minsize);
 							getItem = getTemp.copy();
-							getItem.stackSize = minsize;
+							getItem.setCount(minsize);
 							
 							//clear slot if size <= 0
-							if (getTemp.stackSize <= 0)
+							if (getTemp.getCount() <= 0)
 							{
 								inv.setInventorySlotContents(slotid, null);
 							}
@@ -718,13 +719,13 @@ public class InventoryHelper
 					{
 						if (number > 0)
 						{
-							int minsize = Math.min(getTemp.stackSize, number);
+							int minsize = Math.min(getTemp.getCount(), number);
 							number -= minsize;
-							getTemp.stackSize -= minsize;
-							getItem.stackSize += minsize;
+							getTemp.shrink(minsize);
+							getItem.grow(minsize);
 							
 							//clear slot if size <= 0
-							if (getTemp.stackSize <= 0)
+							if (getTemp.getCount() <= 0)
 							{
 								inv.setInventorySlotContents(slotid, null);
 							}
@@ -746,14 +747,14 @@ public class InventoryHelper
 						//take item from chest
 						if (number > 0)
 						{
-							int minsize = Math.min(getTemp.stackSize, number);
+							int minsize = Math.min(getTemp.getCount(), number);
 							number -= minsize;
-							getTemp.stackSize -= minsize;
+							getTemp.shrink(minsize);
 							getItem = getTemp.copy();
-							getItem.stackSize = minsize;
+							getItem.setCount(minsize);
 							
 							//clear slot if size <= 0
-							if (getTemp.stackSize <= 0)
+							if (getTemp.getCount() <= 0)
 							{
 								inv.setInventorySlotContents(slotid, null);
 							}
@@ -1017,7 +1018,7 @@ public class InventoryHelper
         	k = startid;
         	
         	//loop all slots until stacksize = 0
-            while (itemstack.stackSize > 0 && k < maxSize)
+            while (itemstack.getCount() > 0 && k < maxSize)
             {
             	//calc slot id
             	if (slots != null) j = slots[k];
@@ -1032,20 +1033,20 @@ public class InventoryHelper
                 	(!itemstack.getHasSubtypes() || itemstack.getItemDamage() == slotstack.getItemDamage()) &&
                    ItemStack.areItemStackTagsEqual(itemstack, slotstack))
                 {
-                    int l = slotstack.stackSize + itemstack.stackSize;
+                    int l = slotstack.getCount() + itemstack.getCount();
 
                     //merge: total size < max size
                     if (l <= itemstack.getMaxStackSize())
                     {
-                        itemstack.stackSize = 0;
-                        slotstack.stackSize = l;
+                        itemstack.setCount(0);
+                        slotstack.setCount(l);
                         movedItem = true;
                     }
                     //merge: move item to slot stack
-                    else if (slotstack.stackSize < itemstack.getMaxStackSize())
+                    else if (slotstack.getCount() < itemstack.getMaxStackSize())
                     {
-                        itemstack.stackSize -= itemstack.getMaxStackSize() - slotstack.stackSize;
-                        slotstack.stackSize = itemstack.getMaxStackSize();
+                        itemstack.shrink(itemstack.getMaxStackSize() - slotstack.getCount());
+                        slotstack.setCount(itemstack.getMaxStackSize());
                         movedItem = true;
                     }
                 }
@@ -1056,7 +1057,7 @@ public class InventoryHelper
         }//end is stackable
 
         //no stack can merge, find empty slot
-        if (itemstack.stackSize > 0)
+        if (itemstack.getCount() > 0)
         {
         	k = startid;
 
@@ -1076,7 +1077,7 @@ public class InventoryHelper
                 {
 					if (inv instanceof CapaShipInventory) ((CapaShipInventory) inv).setInventorySlotWithPageCheck(j, itemstack.copy());
 					else inv.setInventorySlotContents(j, itemstack.copy());
-                    itemstack.stackSize = 0;
+                    itemstack.setCount(0);
                     movedItem = true;
                     break;
                 }
@@ -1143,7 +1144,7 @@ public class InventoryHelper
   			stack = inv.getStackInSlotWithPageCheck(i);
   			
   			//only for container with stackSize = 1
-  			if (stack != null && stack.stackSize == 1)
+  			if (stack != null && stack.getCount() == 1)
   			{
   				//check item has fluid capa
   				if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP))
@@ -1151,9 +1152,9 @@ public class InventoryHelper
   					IFluidHandler fluid = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
   					amountMoved += fluid.fill(fs, true);
   				}//end get capa
-  				else if (stack.getItem() instanceof IFluidContainerItem)
+  				else if (stack.getItem() instanceof IFluidHandlerItem)
   				{
-  					amountMoved = ((IFluidContainerItem) stack.getItem()).fill(stack, fs, true);
+  					amountMoved = ((IFluidHandlerItem) stack.getItem()).fill(fs, true);
   				}
   				
   				//if fill success
@@ -1194,7 +1195,7 @@ public class InventoryHelper
 		boolean moved = moveItemstackToInv(inv, moveitem, null);
     	
 		//put stack on ground
-    	if (!moved || moveitem.stackSize > 0)
+    	if (!moved || moveitem.getCount() > 0)
     	{
     		dropItemOnGround(host, moveitem);
     	}

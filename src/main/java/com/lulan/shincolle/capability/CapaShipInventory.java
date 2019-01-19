@@ -1,5 +1,7 @@
 package com.lulan.shincolle.capability;
 
+import javax.annotation.Nonnull;
+
 import com.lulan.shincolle.client.gui.inventory.ContainerShipInventory;
 import com.lulan.shincolle.entity.BasicEntityShip;
 import com.lulan.shincolle.reference.ID;
@@ -88,15 +90,15 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
 	public ItemStack getStackInSlot(int i)
 	{
 		validateSlotIndex(i);
-		return stacks[i];
+		return stacks.get(i);
 	}
 	
 	/** get itemstack in slot with page limit check */
 	public ItemStack getStackInSlotWithPageCheck(int i)
 	{
-		if (i < 0 || i >= this.getSizeInventoryPaged() || i >= stacks.length)
-            throw new RuntimeException("Slot " + i + " not in valid range - [0," + stacks.length + ")");
-		return stacks[i];
+		if (i < 0 || i >= this.getSizeInventoryPaged() || i >= stacks.size())
+            throw new RuntimeException("Slot " + i + " not in valid range - [0," + stacks.size() + ")");
+		return stacks.get(i);
 	}
 
 	/** note:
@@ -111,7 +113,7 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
   	        {
   	            ItemStack itemstack = getStackInSlot(id).splitStack(count);
   	            
-  	            if (getStackInSlot(id).stackSize == 0)
+  	            if (getStackInSlot(id).getCount() == 0)
   	            {
   	            	setStackInSlot(id, null);
   	            }
@@ -147,9 +149,9 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
 		setStackInSlot(i, stack);
 		
 		//若手上物品超過該格子限制數量, 則只能放進限制數量
-		if (stack != null && stack.stackSize > getInventoryStackLimit())
+		if (stack != null && stack.getCount() > getInventoryStackLimit())
 		{
-			stack.stackSize = getInventoryStackLimit();
+			stack.setCount(getInventoryStackLimit());
 		}
 		
 		//change equip slot
@@ -160,16 +162,16 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
 	}
 	
 	/** set itemstack to slot with page limit check */
-	public void setInventorySlotWithPageCheck(int i, ItemStack stack)
+	public void setInventorySlotWithPageCheck(int i, @Nonnull ItemStack stack)
 	{
 		//check slot id
-		if (i < 0 || i >= this.getSizeInventoryPaged() || i >= stacks.length)
-            throw new RuntimeException("Slot " + i + " not in valid range - [0," + stacks.length + ")");
+		if (i < 0 || i >= this.getSizeInventoryPaged() || i >= stacks.size())
+            throw new RuntimeException("Slot " + i + " not in valid range - [0," + stacks.size() + ")");
         
 		//set itemstack
-		if (!ItemStack.areItemStacksEqual(this.stacks[i], stack))
+		if (!ItemStack.areItemStacksEqual(this.stacks.get(i), stack))
 		{
-	        this.stacks[i] = stack;
+	        this.stacks.set(i, stack);  //從array改為NonNullList
 	        onContentsChanged(i);
 		}
 		
@@ -262,8 +264,8 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
   			ItemStack slotstack = getStackInSlot(i);
   			
             if (slotstack != null && slotstack.getItem() == stack.getItem() &&
-            	slotstack.isStackable() && slotstack.stackSize < slotstack.getMaxStackSize() &&
-            	slotstack.stackSize < this.getInventoryStackLimit() &&
+            	slotstack.isStackable() && slotstack.getCount() < slotstack.getMaxStackSize() &&
+            	slotstack.getCount() < this.getInventoryStackLimit() &&
                 (!slotstack.getHasSubtypes() || slotstack.getItemDamage() == stack.getItemDamage()) &&
                  ItemStack.areItemStackTagsEqual(slotstack, stack))
             {
@@ -281,7 +283,7 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
     private int storePartialItemStack(ItemStack stack)
     {
         Item item = stack.getItem();
-        int i = stack.stackSize;
+        int i = stack.getCount();
         int j;
 
         //non stackable item
@@ -297,7 +299,7 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
             }
             else
             {
-            	setStackInSlot(j, ItemStack.copyItemStack(stack));
+            	setStackInSlot(j, stack.copy());
                 return 0;
             }
         }
@@ -342,15 +344,15 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
                 //check the item max stack size
                 slotstack = getStackInSlot(j);
                 
-                if (i > slotstack.getMaxStackSize() - slotstack.stackSize)
+                if (i > slotstack.getMaxStackSize() - slotstack.getCount())
                 {
-                    k = slotstack.getMaxStackSize() - slotstack.stackSize;
+                    k = slotstack.getMaxStackSize() - slotstack.getCount();
                 }
 
                 //check the slot max stack size
-                if (k > this.getInventoryStackLimit() - slotstack.stackSize)
+                if (k > this.getInventoryStackLimit() - slotstack.getCount())
                 {
-                    k = this.getInventoryStackLimit() - slotstack.stackSize;
+                    k = this.getInventoryStackLimit() - slotstack.getCount();
                 }
 
                 //no space for item
@@ -362,8 +364,8 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
                 else
                 {
                     i -= k;
-                    slotstack.stackSize += k;
-                    slotstack.animationsToGo = 5;
+                    slotstack.grow(k);
+                    slotstack.setAnimationsToGo(5);
                     return i;
                 }
             }
@@ -373,7 +375,7 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
   	/** add itemstack to ship inventory */
   	public boolean addItemStackToInventory(final ItemStack stack)
   	{
-        if (stack != null && stack.stackSize != 0 && stack.getItem() != null)
+        if (stack != null && stack.getCount() != 0 && stack.getItem() != null)
         {
             try
             {
@@ -387,10 +389,10 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
                     //add item to slot
                     if (i >= 0)
                     {
-                    	ItemStack copyitem = ItemStack.copyItemStack(stack);
-                    	copyitem.animationsToGo = 5;
+                    	ItemStack copyitem = stack.copy();
+                    	copyitem.setAnimationsToGo(5);
                     	setStackInSlot(i, copyitem);
-                        stack.stackSize = 0;
+                        stack.setCount(0);
                         return true;
                     }
                     //add fail
@@ -405,12 +407,12 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
                 	//add item to slot with stackable check
                     do
                     {
-                        i = stack.stackSize;
-                        stack.stackSize = this.storePartialItemStack(stack);
+                        i = stack.getCount();
+                        stack.setCount(this.storePartialItemStack(stack));
                     }
-                    while (stack.stackSize > 0 && stack.stackSize < i);
+                    while (stack.getCount() > 0 && stack.getCount() < i);
                     
-                    return stack.stackSize < i;
+                    return stack.getCount() < i;
                 }
             }
             catch (Exception e)
@@ -446,6 +448,12 @@ public class CapaShipInventory extends CapaInventory<BasicEntityShip> implements
 	public int getFieldCount()
 	{
 		return 0;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	

@@ -133,7 +133,7 @@ abstract public class BasicTileInventory extends BasicTileEntity implements ISid
   	        {
   	            ItemStack itemstack = itemHandler.getStackInSlot(id).splitStack(count);
 
-  	            if (itemHandler.getStackInSlot(id).stackSize == 0)
+  	            if (itemHandler.getStackInSlot(id).getCount() == 0)
   	            {
   	            	itemHandler.setStackInSlot(id, null);
   	            }
@@ -187,9 +187,9 @@ abstract public class BasicTileInventory extends BasicTileEntity implements ISid
   			itemHandler.setStackInSlot(id, stack);
 			
 			//若手上物品超過該格子限制數量, 則只能放進限制數量
-	  		if (stack != null && stack.stackSize > getInventoryStackLimit())
+	  		if (stack != null && stack.getCount() > getInventoryStackLimit())
 	  		{
-	  			stack.stackSize = getInventoryStackLimit();
+	  			stack.setCount(getInventoryStackLimit());
 	  		}
 		}
   	}

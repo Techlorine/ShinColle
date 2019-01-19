@@ -79,6 +79,9 @@ public class ConfigHandler
 	//crane setting                            liquid tank capa, EU capa
 	public static int[] tileCrane = new int[] {2048000,         160000000};
 	
+    //ship tank setting                           0      1       2       3
+    public static int[] itemShipTank = new int[] {32000, 128000, 512000, 2048000};
+	
 	/********************* INTER-MOD **********************/
 	public static boolean enableIC2 = true;
 	public static boolean enableMetamorphSkill = true;

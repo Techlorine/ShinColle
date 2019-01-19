@@ -387,7 +387,7 @@ public class EntityAbyssMissile extends Entity implements IShipOwner, IShipAttrs
                 
                 if (raytrace != null)
                 {
-                	posEnd = new Vec3d(raytrace.hitVec.xCoord, raytrace.hitVec.yCoord, raytrace.hitVec.zCoord);
+                	posEnd = new Vec3d(raytrace.hitVec.x, raytrace.hitVec.y, raytrace.hitVec.z);
                     
                     if (raytrace.typeOfHit == RayTraceResult.Type.ENTITY)
                     {
@@ -715,23 +715,23 @@ public class EntityAbyssMissile extends Entity implements IShipOwner, IShipAttrs
 		}
 		
 		//damage disabled
-		if (source == DamageSource.inWall || source == DamageSource.starve ||
-			source == DamageSource.cactus || source == DamageSource.fall  ||
-			source == DamageSource.lava || source == DamageSource.inFire ||
-			source == DamageSource.hotFloor || source == DamageSource.anvil ||
-			source == DamageSource.fallingBlock || source == DamageSource.onFire)
+		if (source == DamageSource.IN_WALL || source == DamageSource.STARVE ||
+			source == DamageSource.CACTUS || source == DamageSource.FALL  ||
+			source == DamageSource.LAVA || source == DamageSource.IN_FIRE ||
+			source == DamageSource.HOT_FLOOR || source == DamageSource.ANVIL ||
+			source == DamageSource.FALLING_BLOCK || source == DamageSource.ON_FIRE)
 		{
 			return false;
 		}
 		//damage ignore def value
-		else if (source == DamageSource.magic || source == DamageSource.dragonBreath ||
-				 source == DamageSource.wither)
+		else if (source == DamageSource.MAGIC || source == DamageSource.DRAGON_BREATH ||
+				 source == DamageSource.WITHER)
 		{
         	this.onImpact(null);
 			return true;
 		}
 		//out of world
-		else if (source == DamageSource.outOfWorld)
+		else if (source == DamageSource.OUT_OF_WORLD)
 		{
         	this.onImpact(null);
         	return true;
@@ -761,7 +761,7 @@ public class EntityAbyssMissile extends Entity implements IShipOwner, IShipAttrs
 
     //render用, entity亮度
     @Override
-	public float getBrightness(float parTicks)
+	public float getBrightness()  //DROP PARAM
     {
         return 1F;
     }
@@ -769,7 +769,7 @@ public class EntityAbyssMissile extends Entity implements IShipOwner, IShipAttrs
     //render用, lightmap位置
     @Override
 	@SideOnly(Side.CLIENT)
-    public int getBrightnessForRender(float parTicks)
+    public int getBrightnessForRender()  // DROP PARTICKS
     {
         return 15728880;
     }

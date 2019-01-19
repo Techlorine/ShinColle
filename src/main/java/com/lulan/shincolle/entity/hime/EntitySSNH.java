@@ -116,7 +116,7 @@ public class EntitySSNH extends BasicEntityShipSmall implements IShipInvisible
 	  					if (getStateFlag(ID.F.IsMarried))
 	  					{
 	  						EntityPlayerMP player = (EntityPlayerMP) EntityHelper.getEntityPlayerByUID(this.getPlayerUID());
-	  	  	  				if (player != null && getDistanceSqToEntity(player) < 256D)
+	  	  	  				if (player != null && getDistanceSq(player) < 256D)
 	  	  	  				{
 	  	  	  					//potion effect: id, time, level
 	  	  	  	  	  			player.addPotionEffect(new PotionEffect(MobEffects.INVISIBILITY, 80+getLevel(), 0, false, false));
@@ -153,7 +153,7 @@ public class EntitySSNH extends BasicEntityShipSmall implements IShipInvisible
         		float distRiding = 0F;
         		if (this.goRideEntity != null)
         		{
-        			distRiding = this.getDistanceToEntity(this.goRideEntity);
+        			distRiding = this.getDistance(this.goRideEntity);
         		}
         		
         		//每32 tick找一次路徑
@@ -384,9 +384,10 @@ public class EntitySSNH extends BasicEntityShipSmall implements IShipInvisible
 	}
 
 	@Override
-    public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, @Nullable ItemStack stack, EnumHand hand)
+    public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, EnumHand hand)
     {
-    	//禁用副手
+		 @Nullable ItemStack stack = player.getHeldItemMainhand();
+		//禁用副手
     	if (hand == EnumHand.OFF_HAND) return EnumActionResult.FAIL;
     	
     	//死亡時不反應
@@ -405,7 +406,7 @@ public class EntitySSNH extends BasicEntityShipSmall implements IShipInvisible
 			}
 		}
 		
-		return super.applyPlayerInteraction(player, vec, stack, hand);
+		return super.applyPlayerInteraction(player, vec, hand);
   	}
 	
 	@Override

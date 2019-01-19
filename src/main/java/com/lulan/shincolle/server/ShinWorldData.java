@@ -11,7 +11,7 @@ import com.lulan.shincolle.utility.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.storage.WorldSavedData;
 
 /**伺服器端資料
  * 儲存player id等, 伺服器端判定用資料

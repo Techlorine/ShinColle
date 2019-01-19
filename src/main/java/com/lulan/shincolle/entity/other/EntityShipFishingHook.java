@@ -106,7 +106,7 @@ public class EntityShipFishingHook extends Entity
             	
         	if (host.isDead || !host.isEntityAlive() || rod == null ||
         		rod.getItem() != Items.FISHING_ROD ||
-        		this.getDistanceSqToEntity(host) > 1024D)
+        		this.getDistanceSq(host) > 1024D)
             {
                 this.setDead();
                 return;

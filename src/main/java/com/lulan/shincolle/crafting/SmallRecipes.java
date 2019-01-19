@@ -104,7 +104,7 @@ public class SmallRecipes
 		{	//取得item 0~3的資料, 即四樣材料資料
 			if (item[i] != null)
 			{	//加上null判斷以免NPE
-				itemAmount[i] = item[i].stackSize;
+				itemAmount[i] = item[i].getCount();
 			}
 			else
 			{

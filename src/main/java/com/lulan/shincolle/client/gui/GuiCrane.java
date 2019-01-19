@@ -93,7 +93,7 @@ public class GuiCrane extends GuiContainer
 		int mx = xMouse - guiLeft;
 		int my = yMouse - guiTop;
 		int len = 0;
-		List list = new ArrayList();
+		List<String> list = new ArrayList<String>();
 		
 		//(22,21,35,34) meta (36,21,49,34) dict
 		if (my > 21 && my < 34)
@@ -126,7 +126,7 @@ public class GuiCrane extends GuiContainer
 				}
 			}
 			
-			this.drawHoveringText(list, mx, my+10, this.fontRendererObj);
+			this.drawHoveringText(list, mx, my+10, this.fontRenderer);
 		}
 		else if (my > 35 && my < 50)
 		{
@@ -135,13 +135,13 @@ public class GuiCrane extends GuiContainer
 				switch (this.btnLiquidMode)
 				{
 				case 1:
-					list.add(this.strLiq1);
+					list.add(GuiCrane.strLiq1);
 					break;
 				case 2:
-					list.add(this.strLiq2);
+					list.add(GuiCrane.strLiq2);
 					break;
 				default:
-					list.add(this.strLiq0);
+					list.add(GuiCrane.strLiq0);
 					break;
 				}
 			}
@@ -161,7 +161,7 @@ public class GuiCrane extends GuiContainer
 //				}
 //			}
 			
-			this.drawHoveringText(list, mx, my+10, this.fontRendererObj);
+			this.drawHoveringText(list, mx, my+10, this.fontRenderer);
 		}
 		
 		//draw wait mode
@@ -192,7 +192,7 @@ public class GuiCrane extends GuiContainer
 			break;
 			}
 			
-			this.drawHoveringText(list, -50, 37, this.fontRendererObj);
+			this.drawHoveringText(list, -50, 37, this.fontRenderer);
 		}
 	}
 	
@@ -225,36 +225,36 @@ public class GuiCrane extends GuiContainer
 		default:
 			if (this.btnMode < 10)
 			{
-				strnum = String.format("%.1f", (float)tile.getWaitTime(btnMode) * 0.05F);
+				strnum = String.format("%.1f", (float)TileEntityCrane.getWaitTime(btnMode) * 0.05F);
 				str = I18n.format("gui.shincolle:crane.waitsec", strnum);
 			}
 			else if (this.btnMode < 15)
 			{
-				strnum = String.valueOf((int)((float)tile.getWaitTime(btnMode) * 0.05F));
+				strnum = String.valueOf((int)((float)TileEntityCrane.getWaitTime(btnMode) * 0.05F));
 				str = I18n.format("gui.shincolle:crane.waitsec", strnum);
 			}
 			else
 			{
-				strnum = String.valueOf(tile.getWaitTime(btnMode) / 1200);
+				strnum = String.valueOf(TileEntityCrane.getWaitTime(btnMode) / 1200);
 				str = I18n.format("gui.shincolle:crane.waitmin", strnum);
 			}
 		break;
 		}
 		
-		len = (int) (fontRendererObj.getStringWidth(str) * 0.5F);
-		fontRendererObj.drawStringWithShadow(str, 57 - len, 9, Enums.EnumColors.YELLOW.getValue());
+		len = (int) (fontRenderer.getStringWidth(str) * 0.5F);
+		fontRenderer.drawStringWithShadow(str, 57 - len, 9, Enums.EnumColors.YELLOW.getValue());
 		
 		//draw slot string
-		fontRendererObj.drawString(strLoad, 21, 54, Enums.EnumColors.RED_LIGHT.getValue());
-		fontRendererObj.drawString(strUnload, 21, 85, Enums.EnumColors.BLACK.getValue());
+		fontRenderer.drawString(strLoad, 21, 54, Enums.EnumColors.RED_LIGHT.getValue());
+		fontRenderer.drawString(strUnload, 21, 85, Enums.EnumColors.BLACK.getValue());
 		
 		//draw ship info
 		if (tile.getShip() != null)
 		{
 			//draw ship wait time
 			str = String.valueOf(CalcHelper.getTimeFormated((int) (tile.getShip().getStateTimer(ID.T.CraneTime) * 0.05F)));
-			len = (int) (fontRendererObj.getStringWidth(str) * 0.5F);
-			fontRendererObj.drawString(str, 133 - len, 10, Enums.EnumColors.GRAY_DARK.getValue());
+			len = (int) (fontRenderer.getStringWidth(str) * 0.5F);
+			fontRenderer.drawString(str, 133 - len, 10, Enums.EnumColors.GRAY_DARK.getValue());
 			
 			//draw ship name
 			if (tile.getShip().getCustomNameTag() != null && tile.getShip().getCustomNameTag().length() > 0)
@@ -266,7 +266,7 @@ public class GuiCrane extends GuiContainer
 				str = I18n.format("entity.shincolle."+tile.getShip().getClass().getSimpleName()+".name");
 			}
 			
-			fontRendererObj.drawStringWithShadow(str, 80, 24, Enums.EnumColors.WHITE.getValue());
+			fontRenderer.drawStringWithShadow(str, 80, 24, Enums.EnumColors.WHITE.getValue());
 		}
 		
 		//畫出tooltip

@@ -116,7 +116,7 @@ public class EntityDestroyerIkazuchi extends BasicEntityShipSmall implements ISh
   	  			{
   					EntityPlayer player = EntityHelper.getEntityPlayerByUID(this.getPlayerUID());
   	  				if (getStateFlag(ID.F.IsMarried) && getStateFlag(ID.F.UseRingEffect) &&
-  	  					getStateMinor(ID.M.NumGrudge) > 0 && player != null && getDistanceSqToEntity(player) < 256D)
+  	  					getStateMinor(ID.M.NumGrudge) > 0 && player != null && getDistanceSq(player) < 256D)
   	  				{
   	  					//potion effect: id, time, level
   	  	  	  			player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH , 80+getStateMinor(ID.M.ShipLevel), getStateMinor(ID.M.ShipLevel) / 50, false, false));

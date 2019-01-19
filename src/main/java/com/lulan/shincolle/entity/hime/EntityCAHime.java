@@ -146,7 +146,7 @@ public class EntityCAHime extends BasicEntityShipSmall
         		}
         		else
         		{
-        			float distPush = this.getDistanceToEntity(this.targetPush);
+        			float distPush = this.getDistance(this.targetPush);
         			
             		if (distPush <= 2.5F)
             		{

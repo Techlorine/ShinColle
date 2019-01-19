@@ -179,9 +179,9 @@ public class ShipCmdGetShip extends CommandBase
 					
 					//check dist
 					Vec3d pos1 = sender.getPositionVector();
-					float dx = (float) pos1.xCoord - data.posX;
-					float dy = (float) pos1.yCoord - data.posY;
-					float dz = (float) pos1.zCoord - data.posZ;
+					float dx = (float) pos1.x - data.posX;
+					float dy = (float) pos1.y - data.posY;
+					float dz = (float) pos1.z - data.posZ;
 					float dist = dx * dx + dy * dy + dz * dz;
 					
 					if (dist < 4096F)
@@ -207,11 +207,11 @@ public class ShipCmdGetShip extends CommandBase
 								ship.motionY = 0D;
 								ship.motionZ = 0D;
 								//teleport ship
-								ship.setPosition(pos1.xCoord, pos1.yCoord + 0.5D, pos1.zCoord);
+								ship.setPosition(pos1.x, pos1.y + 0.5D, pos1.z);
 								//set guard pos
 								ship.setSitting(false);
 								ship.setGuardedEntity(null);
-								ship.setGuardedPos((int)pos1.xCoord, (int)(pos1.yCoord + 0.5D), (int)pos1.zCoord, ship.world.provider.getDimension(), 1);
+								ship.setGuardedPos((int)pos1.x, (int)(pos1.y + 0.5D), (int)pos1.z, ship.world.provider.getDimension(), 1);
 								ship.setStateFlag(ID.F.CanFollow, false);
 								//update ship cache
 								ship.updateShipCacheDataWithoutNewID();
@@ -231,7 +231,7 @@ public class ShipCmdGetShip extends CommandBase
 							{
 								ent = EntityHelper.createShipEntity(player.world,
 										data.classID, data.entityNBT,
-										pos1.xCoord, pos1.yCoord + 0.5D, pos1.zCoord, true);
+										pos1.x, pos1.y + 0.5D, pos1.z, true);
 								
 								if (ent != null)
 					            {
@@ -262,7 +262,7 @@ public class ShipCmdGetShip extends CommandBase
 						{
 							ent = EntityHelper.createShipEntity(player.world,
 									data.classID, data.entityNBT,
-									pos1.xCoord, pos1.yCoord + 0.5D, pos1.zCoord, true);
+									pos1.x, pos1.y + 0.5D, pos1.z, true);
 							
 							if (ent != null)
 				            {

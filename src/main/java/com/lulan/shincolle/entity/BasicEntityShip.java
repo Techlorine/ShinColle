@@ -1,6 +1,7 @@
 package com.lulan.shincolle.entity;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -49,6 +50,7 @@ import com.lulan.shincolle.proxy.CommonProxy;
 import com.lulan.shincolle.proxy.ServerProxy;
 import com.lulan.shincolle.reference.Enums;
 import com.lulan.shincolle.reference.Enums.BodyHeight;
+import com.lulan.shincolle.reference.Enums.SoundType;
 import com.lulan.shincolle.reference.ID;
 import com.lulan.shincolle.reference.Values;
 import com.lulan.shincolle.reference.unitclass.Attrs;
@@ -305,7 +307,7 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
     {
     	//get custom sound rate
 		int key = ship.getShipClass() + 2;
-		float[] rate = ConfigHandler.configSound.SOUNDRATE.get(key);
+		EnumMap<SoundType, Float> rate = ConfigHandler.configSound.SOUNDRATE.get(key);
 		int typeKey = key * 100 + type;
 		int typeTemp = type;
 		
@@ -316,11 +318,11 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 		}
 		
 		//has custom sound
-		if (rate != null && rate[type] > 0.01F)
+		if (rate != null && rate.get(key) > 0.01F)
 		{
 			SoundEvent sound = ModSounds.CUSTOM_SOUND.get(typeKey);
 			
-			if (sound != null && ship.rand.nextFloat() < rate[type])
+			if (sound != null && ship.rand.nextFloat() < rate.get(key))
 			{
 				return sound;
 			}
@@ -420,7 +422,7 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
     
     @Override
     @Nullable
-    protected SoundEvent getHurtSound()
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
     {
     	return getCustomSound(2, this);
     }
@@ -1317,7 +1319,7 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 		{
 	        this.isJumping = false;
 	        this.getShipNavigate().clearPathEntity();
-	        this.getNavigator().clearPathEntity();
+	        this.getNavigator().clearPath();
 	        this.setAttackTarget(null);
 	        this.setEntityTarget(null);
 		}
@@ -1591,7 +1593,7 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 				
 				//owner在附近才需要sync
 				if (player != null && player.dimension == this.dimension &&
-					this.getDistanceToEntity(player) < 64F)
+					this.getDistance(player) < 64F)
 				{
 					CommonProxy.channelG.sendTo(new S2CGUIPackets(this), player);
 				}
@@ -1657,7 +1659,7 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 				}
 				
 				//owner在附近才需要sync
-				if (player != null && this.getDistanceToEntity(player) <= 64F)
+				if (player != null && this.getDistance(player) <= 64F)
 				{
 					CommonProxy.channelE.sendTo(new S2CEntitySync(this, type), player);
 				}
@@ -1705,11 +1707,11 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 	 *   SUCCESS:本方法的動作成功, 並且禁止其他interact
 	 */
 	@Override
-    public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, @Nullable ItemStack stack, EnumHand hand)
+    public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, EnumHand hand)
     {
     	//禁用副手, 死亡時不反應, morph不反應
     	if (hand == EnumHand.OFF_HAND || !this.isEntityAlive() || this.isMorph) return EnumActionResult.FAIL;
-    	
+    	@Nullable ItemStack stack = player.getHeldItemMainhand(); //TODO 定位玩家主手上的ItemStack
     	//server side
     	if (!this.world.isRemote)
     	{
@@ -1779,7 +1781,7 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 						//item--
 						if (player != null && !player.capabilities.isCreativeMode)
 						{
-				            --stack.stackSize;
+				            stack.shrink(1);
 						}
 					}
 					
@@ -1860,9 +1862,9 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
      * Moves the entity based on the specified heading.  Args: strafe, forward
      */
 	@Override
-    public void moveEntityWithHeading(float strafe, float forward)
+    public void travel(float strafe, float vertical, float forward)
 	{
-		EntityHelper.moveEntityWithHeading(this, strafe, forward);
+		EntityHelper.travel(this, strafe, 0, forward);
     }
 
 	/** update entity 
@@ -2359,9 +2361,9 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 			
 			InteractHelper.interactFeed(this, null, getItem);
 			
-			getItem.stackSize--;
+			getItem.shrink(1);
 			
-			if (getItem.stackSize <= 0)
+			if (getItem.getCount() <= 0)
 			{
 				getItem = null;
 			}
@@ -2625,13 +2627,13 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
   		if (this.rand.nextInt(10) == 0) randomSensitiveBody();
   		
 		//damage disabled
-		if (source == DamageSource.inWall || source == DamageSource.starve ||
-			source == DamageSource.cactus || source == DamageSource.fall)
+		if (source == DamageSource.IN_WALL || source == DamageSource.STARVE ||
+			source == DamageSource.CACTUS || source == DamageSource.FALL)
 		{
 			return false;
 		}
 		//damage ignore def value
-		else if (source == DamageSource.magic || source == DamageSource.dragonBreath)
+		else if (source == DamageSource.MAGIC || source == DamageSource.DRAGON_BREATH)
 		{
 			//ignore atk < 1% max hp
 			if (atk < this.getMaxHealth() * 0.01F) return false;
@@ -2642,7 +2644,7 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
     		return super.attackEntityFrom(source, atk);
 		}
 		//out of world
-		else if (source == DamageSource.outOfWorld)
+		else if (source == DamageSource.OUT_OF_WORLD)
 		{
 			//取消坐下動作
 			this.setSitting(false);
@@ -2664,8 +2666,8 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 		}
         
     	//若攻擊方為owner, 則直接回傳傷害, 不計def跟friendly fire
-		if (source.getEntity() instanceof EntityPlayer &&
-			TeamHelper.checkSameOwner(source.getEntity(), this))
+		if (source.getTrueSource() instanceof EntityPlayer &&
+			TeamHelper.checkSameOwner(source.getTrueSource(), this))
 		{
 			this.setSitting(false);
 			
@@ -2680,9 +2682,9 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 		{
             return false;
         }
-		else if (source.getEntity() != null)
+		else if (source.getTrueSource() != null)
 		{
-			Entity attacker = source.getEntity();
+			Entity attacker = source.getTrueSource();
 			
 			//不會對自己造成傷害, 可免疫毒/掉落/窒息等傷害 (此為自己對自己造成傷害)
 			if (attacker.equals(this))
@@ -2703,7 +2705,7 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 			}
 			
 			//進行dodge計算
-			float dist = (float) this.getDistanceSqToEntity(attacker);
+			float dist = (float) this.getDistanceSq(attacker);
 			
 			if (CombatHelper.canDodge(this, dist))
 			{
@@ -2768,8 +2770,8 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 	  		if (this.rand.nextInt(5) == 0)
 	  		{
 				//set hit position
-				this.setStateMinor(ID.M.HitHeight, CalcHelper.getEntityHitHeight(this, source.getSourceOfDamage()));
-				this.setStateMinor(ID.M.HitAngle, CalcHelper.getEntityHitSide(this, source.getSourceOfDamage()));
+				this.setStateMinor(ID.M.HitHeight, CalcHelper.getEntityHitHeight(this, source.getImmediateSource()));
+				this.setStateMinor(ID.M.HitAngle, CalcHelper.getEntityHitSide(this, source.getImmediateSource()));
 				
 				//apply emotes
 				applyEmotesReaction(2);
@@ -3092,16 +3094,16 @@ public abstract class BasicEntityShip extends EntityTameable implements IShipCan
 		//decr item stacksize
 		ItemStack getItem = this.itemHandler.getStackInSlot(i);
 
-		if (getItem.stackSize >= itemNum)
+		if (getItem.getCount() >= itemNum)
 		{
-			getItem.stackSize -= itemNum;
+			getItem.shrink(itemNum);
 		}
 		else
 		{	//not enough item, return false
 			return false;
 		}
 				
-		if (getItem.stackSize == 0)
+		if (getItem.getCount() == 0)
 		{
 			getItem = null;
 		}

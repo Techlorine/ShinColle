@@ -327,7 +327,7 @@ public class CalcHelper
 			else if (x1 < -30) return 110;	//look up inf
 			
 			//calc distance
-			float dist = host.getDistanceToEntity(target) - target.width * 0.5F;
+			float dist = host.getDistance(target) - target.width * 0.5F;
 			
 			//check dist > 0
 			if (dist < 0) dist = 0;
@@ -604,9 +604,9 @@ public class CalcHelper
     {
     	if (host != null && target != null)
     	{
-    		double x = target.xCoord - host.xCoord;
-    		double y = target.yCoord - host.yCoord;
-    		double z = target.zCoord - host.zCoord;
+    		double x = target.x - host.x;
+    		double y = target.y - host.y;
+    		double z = target.z - host.z;
     		double dist = MathHelper.sqrt(x * x + y * y + z * z);
     		
     		//避免sqrt過小時, 算出的xyz過大
@@ -632,9 +632,9 @@ public class CalcHelper
     {
     	if (from != null && to != null)
     	{
-    		double x = to.xCoord - from.xCoord;
-    		double y = to.yCoord - from.yCoord;
-    		double z = to.zCoord - from.zCoord;
+    		double x = to.x - from.x;
+    		double y = to.y - from.y;
+    		double z = to.z - from.z;
     		double dist = MathHelper.sqrt(x * x + y * y + z * z);
     		
     		//避免sqrt過小時, 算出的xyz過大

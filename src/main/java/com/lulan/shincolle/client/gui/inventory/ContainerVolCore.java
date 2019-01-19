@@ -98,7 +98,7 @@ public class ContainerVolCore extends Container
             }
 
             //如果物品都放完了, 則設成null清空該物品
-            if (orgStack.stackSize <= 0)
+            if (orgStack.getCount() <= 0)
             {
                 slot.putStack(null);
             }
@@ -123,7 +123,7 @@ public class ContainerVolCore extends Container
         {
             IContainerListener listener = (IContainerListener) this.listeners.get(i);
 
-            //用sendProgressBarUpdate當作update的flag, 但是實際值用自訂的封包來傳送
+            //用sendWindowProperty當作update的flag, 但是實際值用自訂的封包來傳送
             if (this.guiRemainedPower != this.tile.getPowerRemained())
             {
             	this.tile.sendSyncPacket();
@@ -132,7 +132,7 @@ public class ContainerVolCore extends Container
             int temp = this.tile.getField(0);
             if (this.btnActive != temp)
             {
-            	listener.sendProgressBarUpdate(this, 0, temp);
+            	listener.sendWindowProperty(this, 0, temp);
             }
         }//end all listener
 		

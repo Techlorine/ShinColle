@@ -113,7 +113,7 @@ public class ContainerSmallShipyard extends Container
             }
 
             //如果物品都放完了, 則設成null清空該物品
-            if (itemstack1.stackSize == 0)
+            if (itemstack1.getCount() == 0)
             {
                 slot.putStack((ItemStack)null);
             }
@@ -124,10 +124,10 @@ public class ContainerSmallShipyard extends Container
             }
 
             //如果itemstack的數量跟原先的數量相同, 表示都不能移動物品
-            if (itemstack1.stackSize == itemstack.stackSize) return null;
+            if (itemstack1.getCount() == itemstack.getCount()) return null;
             
             //最後再發送一次slot update
-            slot.onPickupFromSlot(player, itemstack1);
+            slot.onTake(player, itemstack1); // TODO check TAKE
         }
         
         //物品移動完成, 回傳剩下的物品
@@ -159,7 +159,7 @@ public class ContainerSmallShipyard extends Container
             //建造類型: 用內建更新方法
             if (this.guiBuildType != this.tile.getBuildType())
             {  			
-            	tileListener.sendProgressBarUpdate(this, 0, this.tile.getBuildType());
+            	tileListener.sendWindowProperty(this, 0, this.tile.getBuildType());
             }
             
             //燃料值: 用自訂封包更新

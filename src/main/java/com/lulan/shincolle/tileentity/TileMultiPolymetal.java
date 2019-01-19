@@ -201,6 +201,12 @@ public class TileMultiPolymetal extends BasicTileMulti
 		}
 		return false;
   	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
   	
   	
 }

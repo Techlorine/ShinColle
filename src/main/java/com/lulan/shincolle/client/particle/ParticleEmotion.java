@@ -12,7 +12,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -451,14 +451,14 @@ public class ParticleEmotion extends Particle
     }
     
     //設定此particle是否會被透明物件 ex: ice, water等擋住
-    @Override
-    public boolean isTransparent()
-    {
-    	return false;
-    }
+   // @Override
+   // public boolean isTransparent()
+   // {
+   // 	return false;           //TODO 该方法在1.12中找不到
+   // }
 
     @Override
-    public void renderParticle(VertexBuffer render, Entity entity, float ptick, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ)
+    public void renderParticle(BufferBuilder render, Entity entity, float ptick, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ)
     {
     	if (particleAge < 0) return;
     	

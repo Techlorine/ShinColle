@@ -60,5 +60,5 @@ abstract public class BasicBlock extends Block implements ICustomModels
 		return String.format("tile.%s%s", Reference.MOD_ID + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
 
-
+	
 }

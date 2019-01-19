@@ -1,6 +1,7 @@
 package com.lulan.shincolle.init;
 
 import com.lulan.shincolle.handler.ConfigHandler;
+import com.lulan.shincolle.utility.LogHelper;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -21,7 +22,8 @@ public class ModOres
 		OreDictionary.registerOre("ingotAbyssium", ingotAbyssium);
 		OreDictionary.registerOre("nuggetAbyssium", nuggetAbyssium);
 		OreDictionary.registerOre("blockAbyssium", ModBlocks.BlockAbyssium);
-		
+		LogHelper.info("TEST-TECHLORINE:"+ (ingotAbyssium.toString()));
+		LogHelper.info("TEST-TECHLORINE:"+ (ModItems.AbyssMetal.getRegistryName().toString()));
 		//polymetal
 		if (ConfigHandler.polyAsMn)
 		{

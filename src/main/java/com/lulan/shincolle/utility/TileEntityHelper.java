@@ -19,11 +19,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 public class TileEntityHelper
 {
@@ -63,16 +62,16 @@ public class TileEntityHelper
 					ItemStack container = stack.getItem().getContainerItem(stack);
 					
 					//if item has container, ignore item with stackSize > 1
-					if (container != null && stack.stackSize > 1)
+					if (container != null && stack.getCount() > 1)
 					{
 						continue;
 					}
 					
-					stack.stackSize--;	//fuel size -1
+					stack.shrink(1);	//fuel size -1
 					tile2.setPowerRemained(tile2.getPowerRemained() + fuelx);	//fuel++
 					
 					//若該物品用完, 用getContainerItem處理是否要清空還是留下桶子 ex: lava bucket -> empty bucket
-					if (stack.stackSize <= 0)
+					if (stack.getCount() <= 0)
 					{
 						stack = container;
 					}
@@ -84,17 +83,17 @@ public class TileEntityHelper
 				}//end disposable fuel
 				
 				//add disposable fuel FAILED, try fluid container (ex: drum, universal cell)
-				if (stack.getItem() instanceof IFluidContainerItem)
+				if (stack.getItem() instanceof IFluidHandlerItem)
 				{
-					IFluidContainerItem container = (IFluidContainerItem) stack.getItem();
-					FluidStack fluid = container.getFluid(stack);
+					IFluidHandlerItem container = (IFluidHandlerItem) stack.getItem();
+					//FluidStack fluid = container.getFluid(stack);
 					
 					//is lava and stack size = 1
-					if (stack.stackSize > 1)
+					if (stack.getCount() > 1)
 					{
 						fuelx = 0;
 					}
-					else if (checkLiquidIsLava1000(fluid))
+					else if (checkLiquidIsLava1000(container))
 					{
 						fuelx = 20000;
 						
@@ -107,7 +106,7 @@ public class TileEntityHelper
 						if (fuelx > 0 && fuelx + tile2.getPowerRemained() < tile2.getPowerMax())
 						{
 							//drain lava, capacity is checked in checkLiquidIsLava(), no check again
-							container.drain(stack, 1000, true);
+							container.drain(1000, true);
 							//fuel++
 							tile2.setPowerRemained(tile2.getPowerRemained() + fuelx);
 							//update slot
@@ -182,17 +181,17 @@ public class TileEntityHelper
 		
 		//check fuel item
 		fuelx = TileEntityFurnace.getItemBurnTime(fuel);
-		
+		IFluidHandlerItem container = (IFluidHandlerItem) fuel.getItem();
 		//若一般的getFuelValue無效, 則改查詢liquid fuel
 		if (fuelx <= 0)
 		{
-			FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(fuel);
+		//	FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(fuel);
 
 			//只接受岩漿為液體燃料 : fluid.tile.lava
-			if (checkLiquidIsLava1000(fluid))
+			if (checkLiquidIsLava1000(container))
 			{
 				//not support for large container
-				if (fluid.amount > 1000)
+				if (container.getTankProperties()[0].getContents().amount > 1000)
 				{
 					return 0;
 				}
@@ -204,18 +203,18 @@ public class TileEntityHelper
 		}
 		
 		//add fluid container fuel (ex: drum, universal cell)
-		if (fuel.getItem() instanceof IFluidContainerItem)
+		if (fuel.getItem() instanceof IFluidHandlerItem)
 		{
-			IFluidContainerItem container = (IFluidContainerItem) fuel.getItem();
-			FluidStack fluid = container.getFluid(fuel);
+			IFluidHandlerItem container2 = (IFluidHandlerItem) fuel.getItem();
+			FluidStack fluid = container2.getTankProperties()[0].getContents();
 			
-			if (fuel.stackSize > 1)
+			if (fuel.getCount() > 1)
 			{
 				return 0;
 			}
 			
 			//check is lava
-			if (checkLiquidIsLava1000(fluid))
+			if (checkLiquidIsLava1000(container2))
 			{
 				//lava fuel = 20k
 				fuelx = 20000;
@@ -225,21 +224,22 @@ public class TileEntityHelper
 		return fuelx;
 	}
 	
-	/** check liquid is a bucket of lava for 1.7.10 */
-	public static boolean checkLiquidIsLava1000(FluidStack fluid)
+	/** check liquid is a bucket of lava for 1.7.10 */  //TODO deprecate
+	
+	public static boolean checkLiquidIsLava1000(IFluidHandlerItem container)
 	{
-		return checkLiquidIsLavaWithAmount(fluid, 1000);
+		return checkLiquidIsLavaWithAmount(container, 1000);
 	}
 	
 	/** check liquid is lava for 1.7.10 */
-	public static boolean checkLiquidIsLava(FluidStack fluid)
+	public static boolean checkLiquidIsLava(IFluidHandlerItem container)
 	{
-		return checkLiquidIsLavaWithAmount(fluid, 0);
+		return checkLiquidIsLavaWithAmount(container, 0);
 	}
-	
+
 	/** check liquid is lava and enough amount for 1.7.10 */
-	public static boolean checkLiquidIsLavaWithAmount(FluidStack fluid, int amount)
-	{
+	   public static boolean checkLiquidIsLavaWithAmount(IFluidHandlerItem container, int amount)
+	{   FluidStack fluid = container.getTankProperties()[0].getContents();
 		if (fluid != null && checkLiquidIsLava(fluid.getFluid()) && fluid.amount == amount)
 		{
 			return true;

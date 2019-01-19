@@ -128,9 +128,9 @@ public class ParticleHelper
 			}
 			else if (target.getLookVec() != null)
 			{
-				lookX = target.getLookVec().xCoord;
-				lookY = target.getLookVec().yCoord;
-				lookZ = target.getLookVec().zCoord;
+				lookX = target.getLookVec().x;
+				lookY = target.getLookVec().y;
+				lookZ = target.getLookVec().z;
 			}
 			
 			//spawn particle

@@ -57,7 +57,7 @@ public class CapaInventory<T> extends ItemStackHandler
     	
     	if (slotStart + length > getSlots() || length < 0)
     	{
-    		throw new RuntimeException("Slot length not in valid range - [0, " + stacks.length + ")");
+    		throw new RuntimeException("Slot length not in valid range - [0, " + stacks.size() + ")");  //從array改為NonNullList
     	}
     	
     	//return items
@@ -66,7 +66,7 @@ public class CapaInventory<T> extends ItemStackHandler
     	
     	for (int i = slotStart; i < slotEnd; i++)
     	{
-    		items[i] = stacks[i];
+    		items[i] = stacks.get(i);  //從array改為NonNullList
     	}
     	
     	return items;

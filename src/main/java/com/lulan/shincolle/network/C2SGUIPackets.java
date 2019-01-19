@@ -720,7 +720,7 @@ public class C2SGUIPackets implements IMessage
 		break;
 		case PID.SetUnitName:
 		{
-			player = ctx.getServerHandler().playerEntity;
+			player = ctx.getServerHandler().player;
 			capa = CapaTeitoku.getTeitokuCapability(player);
 			
 			if (capa != null)

@@ -385,9 +385,9 @@ abstract public class BasicEntitySummon extends EntityLiving implements IShipCan
 	}
   	
     @Override
-    public void moveEntityWithHeading(float strafe, float forward)
+    public void travel(float strafe, float vertical, float forward)
     {
-    	EntityHelper.moveEntityWithHeading(this, strafe, forward);
+    	EntityHelper.travel(this, strafe, 0, forward);
     }
 
 	@Override
@@ -632,19 +632,19 @@ abstract public class BasicEntitySummon extends EntityLiving implements IShipCan
 		boolean checkDEF = true;
 		
 		//damage disabled
-		if (source == DamageSource.inWall || source == DamageSource.starve ||
-			source == DamageSource.cactus || source == DamageSource.fall)
+		if (source == DamageSource.IN_WALL || source == DamageSource.STARVE ||
+			source == DamageSource.CACTUS || source == DamageSource.FALL)
 		{
 			return false;
 		}
 		//damage ignore def value
-		else if (source == DamageSource.magic || source == DamageSource.wither ||
-				 source == DamageSource.dragonBreath)
+		else if (source == DamageSource.MAGIC || source == DamageSource.WITHER ||
+				 source == DamageSource.DRAGON_BREATH)
 		{
 			checkDEF = false;
 		}
 		//out of world
-		else if (source == DamageSource.outOfWorld)
+		else if (source == DamageSource.OUT_OF_WORLD)
 		{
 			this.returnSummonResource();
 			this.setDead();
@@ -658,8 +658,8 @@ abstract public class BasicEntitySummon extends EntityLiving implements IShipCan
     	}
     	
     	//若攻擊方為owner, 則直接回傳傷害, 不計def跟friendly fire
-		if (source.getEntity() instanceof EntityPlayer &&
-			TeamHelper.checkSameOwner(source.getEntity(), this))
+		if (source.getTrueSource() instanceof EntityPlayer &&
+			TeamHelper.checkSameOwner(source.getTrueSource(), this))
 		{
 			return super.attackEntityFrom(source, atk);
 		}
@@ -670,9 +670,9 @@ abstract public class BasicEntitySummon extends EntityLiving implements IShipCan
             return false;
         }
 		//只對entity damage類有效
-		else if (source.getEntity() != null)
+		else if (source.getTrueSource() != null)
 		{
-			Entity attacker = source.getEntity();
+			Entity attacker = source.getTrueSource();
 			
 			//不會對自己造成傷害, 可免疫毒/掉落/窒息等傷害 (此為自己對自己造成傷害)
 			if (attacker.equals(this))
@@ -691,7 +691,7 @@ abstract public class BasicEntitySummon extends EntityLiving implements IShipCan
 			}
 			
 			//進行dodge計算
-			float dist = (float) this.getDistanceSqToEntity(attacker);
+			float dist = (float) this.getDistanceSq(attacker);
 			
 			if (CombatHelper.canDodge(this, dist))
 			{

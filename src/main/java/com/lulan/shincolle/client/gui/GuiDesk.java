@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -248,14 +249,14 @@ public class GuiDesk extends GuiContainer
 		StrRemove = I18n.format("gui.shincolle:target.remove");
 	}
 	
-	//有用到fontRendererObj的必須放在此init
+	//有用到fontRendererObj的必須放在此init  //TODO 改成fontRenderer了！
 	@Override
 	public void initGui()
     {
 		super.initGui();
 		
         //textField: font, x, y, width, height
-        this.textField = new GuiTextField(1, this.fontRendererObj, (int)((this.guiLeft+10)*this.GuiScale), (int)((this.guiTop+24)*this.GuiScale), 153, 12);
+        this.textField = new GuiTextField(1, this.fontRenderer, (int)((this.guiLeft+10)*this.GuiScale), (int)((this.guiTop+24)*this.GuiScale), 153, 12);
         this.textField.setTextColor(-1);					//點選文字框時文字顏色
         this.textField.setDisabledTextColour(-1);			//無點選文字框時文字顏色
         this.textField.setEnableBackgroundDrawing(true);	//畫出文字框背景
@@ -358,7 +359,7 @@ public class GuiDesk extends GuiContainer
 				}
 			}//end for all obj in shipList
 			
-			drawHoveringText(list, mx, my, this.fontRendererObj);
+			drawHoveringText(list, mx, my, this.fontRenderer);
 		break;  //end radar
 		case 2:     /** book */
 			int getbtn = GuiHelper.getButton(ID.Gui.ADMIRALDESK, 2, mx, my);
@@ -368,9 +369,9 @@ public class GuiDesk extends GuiContainer
         	{
         		getbtn -= 2;
         		String strChap = I18n.format("gui.shincolle:book.chap"+getbtn+".title");
-        		List list2 = CalcHelper.stringConvNewlineToList(strChap);
-        		int strLen = this.fontRendererObj.getStringWidth(strChap);
-        		drawHoveringText(list2, mx-strLen-20, my, this.fontRendererObj);
+        		List<String> list2 = CalcHelper.stringConvNewlineToList(strChap);
+        		int strLen = this.fontRenderer.getStringWidth(strChap);
+        		drawHoveringText(list2, mx-strLen-20, my, this.fontRenderer);
         	}
         	//get item text
         	else
@@ -430,8 +431,8 @@ public class GuiDesk extends GuiContainer
 					
 					//draw page number
 					String str = "No. "+this.book_pageNum;
-					int strlen = (int)(fontRendererObj.getStringWidth(str) * 0.5F);
-					fontRendererObj.drawStringWithShadow(str, 55, 32, this.book_chapNum == 4 ? Enums.EnumColors.RED_DARK.getValue() : Enums.EnumColors.CYAN.getValue());
+					int strlen = (int)(fontRenderer.getStringWidth(str) * 0.5F);
+					fontRenderer.drawStringWithShadow(str, 55, 32, this.book_chapNum == 4 ? Enums.EnumColors.RED_DARK.getValue() : Enums.EnumColors.CYAN.getValue());
 				}
 				else if (this.book_chapNum == 6)
 				{
@@ -439,7 +440,7 @@ public class GuiDesk extends GuiContainer
 				}
 			}
 			
-			if (canDrawText) GuiBook.drawBookContent(this, this.fontRendererObj, this.book_chapNum, this.book_pageNum);
+			if (canDrawText) GuiBook.drawBookContent(this, this.fontRenderer, this.book_chapNum, this.book_pageNum);
 		break;
 		case 3:		//team
 			drawTeamText();
@@ -1371,7 +1372,7 @@ public class GuiDesk extends GuiContainer
 				s2 = (BasicEntityShip) s.ship;
 				
 				//draw name
-				fontRendererObj.drawString(s.name, 147, texty, Enums.EnumColors.WHITE.getValue());
+				fontRenderer.drawString(s.name, 147, texty, Enums.EnumColors.WHITE.getValue());
 				texty += 12;
 				
 				//draw pos
@@ -1386,9 +1387,9 @@ public class GuiDesk extends GuiContainer
 				
 				GlStateManager.pushMatrix();
 				GlStateManager.scale(0.8F, 0.8F, 1F);
-				fontRendererObj.drawString(str, 184, (int)(texty*1.25F), Enums.EnumColors.CYAN.getValue());
+				fontRenderer.drawString(str, 184, (int)(texty*1.25F), Enums.EnumColors.CYAN.getValue());
 				texty += 9;
-				fontRendererObj.drawString(str2, 184, (int)(texty*1.25F), Enums.EnumColors.PURPLE_LIGHT.getValue());
+				fontRenderer.drawString(str2, 184, (int)(texty*1.25F), Enums.EnumColors.PURPLE_LIGHT.getValue());
 				texty += 11;
 				GlStateManager.popMatrix();
 			}
@@ -1442,11 +1443,11 @@ public class GuiDesk extends GuiContainer
 				str = TextFormatting.GRAY + StrTeamID +":  "+
 					  TextFormatting.YELLOW + this.capa.getPlayerUID() +" : "+
 					  TextFormatting.LIGHT_PURPLE + tdata.getTeamLeaderName();
-				fontRendererObj.drawString(str, 11, 34, 0);  //org pos: 11,42
+				fontRenderer.drawString(str, 11, 34, 0);  //org pos: 11,42
 				
 				//draw team name
 				str = TextFormatting.WHITE + tdata.getTeamName();
-				fontRendererObj.drawSplitString(str, 11, 44, 160, 0);
+				fontRenderer.drawSplitString(str, 11, 44, 160, 0);
 				GlStateManager.popMatrix();
 			}
 		}
@@ -1577,7 +1578,7 @@ public class GuiDesk extends GuiContainer
 		case TEAMSTATE_CREATE:
 			str = TextFormatting.WHITE + StrTeamID +"  "+
 				  TextFormatting.YELLOW + this.capa.getPlayerUID();  //use pUID for team ID
-			fontRendererObj.drawString(str, 10, 43, 0);
+			fontRenderer.drawString(str, 10, 43, 0);
 			
 			strLB = StrOK;
 			colorLB = Enums.EnumColors.WHITE.getValue();
@@ -1639,17 +1640,17 @@ public class GuiDesk extends GuiContainer
 		}//end switch
 		
 		//draw button string
-		int strlen = (int) (this.fontRendererObj.getStringWidth(strLT) * 0.5F);
-		fontRendererObj.drawString(strLT, 31-strlen, 160, colorLT);
+		int strlen = (int) (this.fontRenderer.getStringWidth(strLT) * 0.5F);
+		fontRenderer.drawString(strLT, 31-strlen, 160, colorLT);
 
-		strlen = (int) (this.fontRendererObj.getStringWidth(strLB) * 0.5F);
-		fontRendererObj.drawString(strLB, 31-strlen, 174, colorLB);		
+		strlen = (int) (this.fontRenderer.getStringWidth(strLB) * 0.5F);
+		fontRenderer.drawString(strLB, 31-strlen, 174, colorLB);		
 
-		strlen = (int) (this.fontRendererObj.getStringWidth(strRT) * 0.5F);
-		fontRendererObj.drawString(strRT, 110-strlen, 160, colorRT);
+		strlen = (int) (this.fontRenderer.getStringWidth(strRT) * 0.5F);
+		fontRenderer.drawString(strRT, 110-strlen, 160, colorRT);
 
-		strlen = (int) (this.fontRendererObj.getStringWidth(strRB) * 0.5F);
-		fontRendererObj.drawString(strRB, 110-strlen, 174, colorRB);		
+		strlen = (int) (this.fontRenderer.getStringWidth(strRB) * 0.5F);
+		fontRenderer.drawString(strRB, 110-strlen, 174, colorRB);		
 		
 		//draw team list
 		List<TeamData> tlist = this.capa.getPlayerTeamDataList();
@@ -1684,11 +1685,11 @@ public class GuiDesk extends GuiContainer
 					  TextFormatting.LIGHT_PURPLE + tdata2.getTeamLeaderName() +"  "+
 					  allyInfo;
 				//org pos: 146, texty
-				fontRendererObj.drawString(str, 181, texty, Enums.EnumColors.WHITE.getValue());
+				fontRenderer.drawString(str, 181, texty, Enums.EnumColors.WHITE.getValue());
 				texty += 9;
 				
 				//draw name drawSplitString
-				fontRendererObj.drawSplitString(tdata2.getTeamName(), 181, texty, 132, Enums.EnumColors.WHITE.getValue());
+				fontRenderer.drawSplitString(tdata2.getTeamName(), 181, texty, 132, Enums.EnumColors.WHITE.getValue());
 				texty += 31;
 			}
 			//get null team data, draw space to guarantee order
@@ -1750,11 +1751,11 @@ public class GuiDesk extends GuiContainer
 							  TextFormatting.LIGHT_PURPLE + tdata3.getTeamLeaderName() +"  "+
 							  allyInfo;
 						//org pos: 146, texty
-						fontRendererObj.drawString(str, 11, texty, 0);
+						fontRenderer.drawString(str, 11, texty, 0);
 						texty += 9;
 						
 						//draw name
-						fontRendererObj.drawSplitString(tdata3.getTeamName(), 11, texty, 170, Enums.EnumColors.WHITE.getValue());
+						fontRenderer.drawSplitString(tdata3.getTeamName(), 11, texty, 170, Enums.EnumColors.WHITE.getValue());
 						texty += 30;
 					}
 					//get null team data, draw space to guarantee order
@@ -1781,15 +1782,16 @@ public class GuiDesk extends GuiContainer
 			
 			if (tarStr != null)
 			{
-				Map<Class<? extends Entity> ,String> entityMap = EntityList.CLASS_TO_NAME;
+				Set<ResourceLocation> entitySet = EntityList.getEntityNameList();  //TODO 大改 传入RLo 传出TargetEnt
 				
-				if (entityMap != null)
+				if (entitySet != null)    //验证非空。
 				{
-					entityMap.forEach((k, v) ->
+					entitySet.forEach((k)  ->
 					{
-						if (tarStr.equals(k.getSimpleName()))
+						if (tarStr.equals(k.getResourcePath()))   //匹配姓名。
 						{
-							this.targetEntity = EntityList.createEntityByName(v, this.player.world);
+							this.targetEntity = EntityList.createEntityByIDFromName(k, this.player.world);
+							//改TargetEnt   //TODO
 							return;
 						}
 					});
@@ -1827,7 +1829,7 @@ public class GuiDesk extends GuiContainer
 			
 			rm.setPlayerViewY(180.0F);
 			rm.setRenderShadow(false);
-			rm.doRenderEntity(this.targetEntity, 0D, 0D, 0D, 0F, 1F, false);
+			rm.renderEntity(this.targetEntity, 0D, 0D, 0D, 0F, 1F, false);
 			rm.setRenderShadow(true);
 			
 	        GlStateManager.popMatrix();
@@ -1844,8 +1846,8 @@ public class GuiDesk extends GuiContainer
 	{
 		//draw button text
 		String str = StrRemove;
-		int strlen = (int) (this.fontRendererObj.getStringWidth(str) * 0.5F);
-		fontRendererObj.drawString(str, 31-strlen, 160, Enums.EnumColors.WHITE.getValue());
+		int strlen = (int) (this.fontRenderer.getStringWidth(str) * 0.5F);
+		fontRenderer.drawString(str, 31-strlen, 160, Enums.EnumColors.WHITE.getValue());
 		
 		//draw target list
 		int texty = 28;
@@ -1856,7 +1858,7 @@ public class GuiDesk extends GuiContainer
 			if (str != null)
 			{
 				//draw name
-				fontRendererObj.drawString(str, 146, texty, Enums.EnumColors.WHITE.getValue());
+				fontRenderer.drawString(str, 146, texty, Enums.EnumColors.WHITE.getValue());
 				texty += 12;
 			}
 		}
@@ -2222,31 +2224,39 @@ public class GuiDesk extends GuiContainer
 		}
 		
 		//get entity name
-		shipName = ShipCalc.getEntityToSpawnName(classID);
+		String shipName2 = ShipCalc.getEntityToSpawnName(classID);
 		
 		//set ship model
-        if (EntityList.NAME_TO_CLASS.containsKey(shipName))
-        {
-            this.shipModel = (BasicEntityShip) EntityList.createEntityByName(shipName, player.world);
-            
-            if (this.shipModel != null)
-            {
-            	this.shipModel.setStateFlag(ID.F.NoFuel, false);
-            	this.shipType = this.shipModel.getShipType();
-    			this.shipClass = this.shipModel.getShipClass();
-    			this.shipMaxStats = this.shipModel.getStateMinor(ID.M.NumState);
-    			
-    			this.iconXY = new int[2][3];
-    			this.iconXY[0] = Values.ShipTypeIconMap.get((byte)this.shipType);
-    			this.iconXY[1] = Values.ShipNameIconMap.get(this.shipClass);
-            }
-            else
-            {
-            	this.shipMaxStats = 0;
-    			this.shipStats = 0;
-            }
+        if (shipName2 != null) {
+		EntityList.getEntityNameList().forEach(kk->{
+        	if (kk.toString() == shipName)
+        	{
+                this.shipModel = (BasicEntityShip) EntityList.createEntityByIDFromName(kk, player.world);
+                
+                if (this.shipModel != null)
+                {
+                	this.shipModel.setStateFlag(ID.F.NoFuel, false);
+                	this.shipType = this.shipModel.getShipType();
+        			this.shipClass = this.shipModel.getShipClass();
+        			this.shipMaxStats = this.shipModel.getStateMinor(ID.M.NumState);
+        			
+        			this.iconXY = new int[2][3];
+        			this.iconXY[0] = Values.ShipTypeIconMap.get((byte)this.shipType);
+        			this.iconXY[1] = Values.ShipNameIconMap.get(this.shipClass);
+                }
+                else
+                {
+                	this.shipMaxStats = 0;
+        			this.shipStats = 0;
+                }
+        	}
+        });	
+        
         }
+
 	}
+
+       
 	
 	private void setShipMount()
 	{
@@ -2354,7 +2364,7 @@ public class GuiDesk extends GuiContainer
             	//set moving motion
             	if (this.shipModel.isSprinting())
             	{
-            		this.shipModel.moveEntityWithHeading(1F, 0F);
+            		this.shipModel.travel(1F, 0F, 0F);
             	}
             	else
             	{
@@ -2373,7 +2383,7 @@ public class GuiDesk extends GuiContainer
                 	//set mount moving motion
                 	if (this.shipMount.isSprinting())
                 	{
-                		this.shipMount.moveEntityWithHeading(1F, 0F);
+                		this.shipMount.travel(1F, 0F, 0F);
                 	}
                 	else
                 	{
@@ -2420,13 +2430,13 @@ public class GuiDesk extends GuiContainer
 				float[] seatPos = this.shipMount.getSeatPos();
 				//ship必須先畫才畫mounts
 				GlStateManager.translate(seatPos[2], seatPos[1] + this.shipModel.getYOffset(), seatPos[0]);
-				rm.doRenderEntity(this.shipModel, 0D, 0D, 0D, 0F, partialTick, false);
+				rm.renderEntity(this.shipModel, 0D, 0D, 0D, 0F, partialTick, false);
 				GlStateManager.translate(-seatPos[2], -seatPos[1] - this.shipModel.getYOffset(), -seatPos[0]);
-				rm.doRenderEntity(this.shipMount, 0D, 0D, 0D, 0F, partialTick, false);
+				rm.renderEntity(this.shipMount, 0D, 0D, 0D, 0F, partialTick, false);
 			}
 			else
 			{
-				rm.doRenderEntity(this.shipModel, 0D, 0D, 0D, 0F, partialTick, false);
+				rm.renderEntity(this.shipModel, 0D, 0D, 0D, 0F, partialTick, false);
 			}
 			
 			rm.setRenderShadow(true);

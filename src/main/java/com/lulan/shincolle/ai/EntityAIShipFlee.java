@@ -65,7 +65,7 @@ public class EntityAIShipFlee extends EntityAIBase
 	}
 	
     @Override
-	public boolean continueExecuting()
+	public boolean shouldContinueExecuting()
     {
     	return shouldExecute();
     }

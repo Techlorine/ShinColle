@@ -39,7 +39,7 @@ import net.minecraftforge.items.ItemStackHandler;
  * 
  * TODO: remove this capa, move to ServerProxy world data
  */
-public class CapaTeitoku implements ICapaTeitoku, IInventory
+abstract public class CapaTeitoku implements ICapaTeitoku, IInventory
 {
 	public static final String CAPA_KEY = "TeitokuExtProps";
 	public static final String INV_KEY = "CpInv";
@@ -1689,7 +1689,7 @@ public class CapaTeitoku implements ICapaTeitoku, IInventory
   	        {
   	            ItemStack itemstack = itemHandler.getStackInSlot(id).splitStack(count);
 
-  	            if (itemHandler.getStackInSlot(id).stackSize == 0)
+  	            if (itemHandler.getStackInSlot(id).getCount() == 0)
   	            {
   	            	itemHandler.setStackInSlot(id, null);
   	            }
@@ -1722,9 +1722,9 @@ public class CapaTeitoku implements ICapaTeitoku, IInventory
   			itemHandler.setStackInSlot(id, stack);
 			
 			//若手上物品超過該格子限制數量, 則只能放進限制數量
-	  		if (stack != null && stack.stackSize > getInventoryStackLimit())
+	  		if (stack != null && stack.getCount() > getInventoryStackLimit())
 	  		{
-	  			stack.stackSize = getInventoryStackLimit();
+	  			stack.setCount(getInventoryStackLimit());
 	  		}
 	  		
 	  		//check item in equip slot

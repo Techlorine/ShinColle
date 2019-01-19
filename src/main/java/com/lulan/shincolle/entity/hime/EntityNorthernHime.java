@@ -171,7 +171,7 @@ public class EntityNorthernHime extends BasicEntityShipCV
         		float distRiding = 0F;
         		if (this.goRideEntity != null)
         		{
-        			distRiding = this.getDistanceToEntity(this.goRideEntity);
+        			distRiding = this.getDistance(this.goRideEntity);
         		}
         		
         		//每32 tick找一次路徑
@@ -272,9 +272,10 @@ public class EntityNorthernHime extends BasicEntityShipCV
 	}
 
 	@Override
-    public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, @Nullable ItemStack stack, EnumHand hand)
+    public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, EnumHand hand)
     {
-    	//禁用副手
+		@Nullable ItemStack stack = player.getHeldItemMainhand();
+		//禁用副手
     	if (hand == EnumHand.OFF_HAND) return EnumActionResult.FAIL;
     	
     	//死亡時不反應
@@ -293,7 +294,7 @@ public class EntityNorthernHime extends BasicEntityShipCV
 			}
 		}
 		
-		return super.applyPlayerInteraction(player, vec, stack, hand);
+		return super.applyPlayerInteraction(player, vec, hand);
   	}
 	
 	@Override

@@ -383,7 +383,7 @@ public abstract class BasicEntityShipHostile extends EntityMob implements IShipC
 	//受傷音效
     @Override
     @Nullable
-    protected SoundEvent getHurtSound()
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
     {
 		if (rand.nextInt(2) == 0 && this.soundHurtDelay <= 0)
 		{
@@ -501,20 +501,20 @@ public abstract class BasicEntityShipHostile extends EntityMob implements IShipC
     	boolean checkDEF = true;
     	
 		//damage disabled
-		if (source == DamageSource.inWall || source == DamageSource.starve ||
-			source == DamageSource.cactus || source == DamageSource.fall)
+		if (source == DamageSource.IN_WALL || source == DamageSource.STARVE ||
+			source == DamageSource.CACTUS || source == DamageSource.FALL)
 		{
 			return false;
 		}
 		//damage ignore def value
-		else if (source == DamageSource.magic || source == DamageSource.dragonBreath)
+		else if (source == DamageSource.MAGIC || source == DamageSource.DRAGON_BREATH)
 		{
 			//ignore atk < 1% max hp
 			if (atk < this.getMaxHealth() * 0.01F) return false;
 			return super.attackEntityFrom(source, atk);
 		}
 		//out of world
-		else if (source == DamageSource.outOfWorld)
+		else if (source == DamageSource.OUT_OF_WORLD)
 		{
 			//取消坐下動作
 			this.setDead();
@@ -535,15 +535,15 @@ public abstract class BasicEntityShipHostile extends EntityMob implements IShipC
 		{
             return false;
         }
-		else if (source.getEntity() != null)
+		else if (source.getTrueSource() != null)
 		{
-			Entity attacker = source.getEntity();
+			Entity attacker = source.getTrueSource();
 			
 			//不會對自己造成傷害, 可免疫毒/掉落/窒息等傷害 (此為自己對自己造成傷害)
 			if (attacker.equals(this)) return false;
 			
 			//進行dodge計算
-			float dist = (float) this.getDistanceSqToEntity(attacker);
+			float dist = (float) this.getDistanceSq(attacker);
 			
 			if (CombatHelper.canDodge(this, dist))
 			{
@@ -765,9 +765,9 @@ public abstract class BasicEntityShipHostile extends EntityMob implements IShipC
 	}
 	
 	@Override
-    public void moveEntityWithHeading(float strafe, float forward)
+    public void travel(float strafe, float vertical, float forward)
 	{
-		EntityHelper.moveEntityWithHeading(this, strafe, forward);
+		EntityHelper.travel(this, strafe, 0, forward);
     }
 	
 	/** send sync packet:
@@ -1210,7 +1210,7 @@ public abstract class BasicEntityShipHostile extends EntityMob implements IShipC
 	}
   	
   	@Override
-  	public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, @Nullable ItemStack stack, EnumHand hand)
+  	public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, EnumHand hand)
     {
 		//use kaitai hammer to kill hostile ship (creative mode only)
 		if (!this.world.isRemote && player.capabilities.isCreativeMode)

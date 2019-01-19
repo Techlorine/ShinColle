@@ -100,5 +100,42 @@ public class Enums
 		SEARCHLIGHT
 	}//end sp effect
 	
-    
+	  /**
+     * sound type
+     */
+    public static enum SoundType
+    {
+        IDLE,
+        HIT,
+        HURT,
+        DEAD,
+        MARRY,
+        KNOCKBACK,
+        PICKITEM,
+        FEED,
+        TIMEKEEP00,
+        TIMEKEEP01,
+        TIMEKEEP02,
+        TIMEKEEP03,
+        TIMEKEEP04,
+        TIMEKEEP05,
+        TIMEKEEP06,
+        TIMEKEEP07,
+        TIMEKEEP08,
+        TIMEKEEP09,
+        TIMEKEEP10,
+        TIMEKEEP11,
+        TIMEKEEP12,
+        TIMEKEEP13,
+        TIMEKEEP14,
+        TIMEKEEP15,
+        TIMEKEEP16,
+        TIMEKEEP17,
+        TIMEKEEP18,
+        TIMEKEEP19,
+        TIMEKEEP20,
+        TIMEKEEP21,
+        TIMEKEEP22,
+        TIMEKEEP23
+    }
 }

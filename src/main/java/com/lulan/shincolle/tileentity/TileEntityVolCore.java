@@ -172,11 +172,11 @@ public class TileEntityVolCore extends BasicTileInventory implements ITickable
 				//add disposable fuel (ex: coal, lava bucket, lava cell)
 				if (fuelx > 0 && fuelx + this.remainedPower < this.POWERMAX)
 				{
-					stack.stackSize--;	//fuel item --
+					stack.shrink(1);	//fuel item --
 					this.remainedPower += fuelx;
 					
 					//若該物品用完, 用getContainerItem處理是否要清空還是留下桶子 ex: lava bucket -> empty bucket
-					if (stack.stackSize <= 0)
+					if (stack.getCount() <= 0)
 					{
 						stack = stack.getItem().getContainerItem(stack);
 					}
@@ -374,7 +374,7 @@ public class TileEntityVolCore extends BasicTileInventory implements ITickable
                 		ent.setFire(2);
                 		
                 		//hurt target
-                		ent.attackEntityFrom(DamageSource.inFire, 4F);
+                		ent.attackEntityFrom(DamageSource.IN_FIRE, 4F);
                 		
                 		//show hot emotes
                 		int emotes;
@@ -458,6 +458,12 @@ public class TileEntityVolCore extends BasicTileInventory implements ITickable
 	public int getFieldCount()
 	{
 		return 1;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	

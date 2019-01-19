@@ -431,7 +431,7 @@ public class ModelCarrierWDemon extends ShipModelBaseAdv
     	GlStateManager.enableLighting();
     	
     	//reset light
-    	int j = entity.getBrightnessForRender(f5);
+    	int j = entity.getBrightnessForRender();   //TODO SAME AS 
         int k = j % 65536;
         int l = j / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)k, (float)l);

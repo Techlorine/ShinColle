@@ -233,9 +233,9 @@ public class ShipCmdEmotes extends CommandBase
 			height = 0.5F;
 			entityType = 0;
 			
-			px = (float) sender.getPositionVector().xCoord;
-			py = (float) sender.getPositionVector().yCoord;
-			pz = (float) sender.getPositionVector().zCoord;
+			px = (float) sender.getPositionVector().x;
+			py = (float) sender.getPositionVector().y;
+			pz = (float) sender.getPositionVector().z;
 		}
 
 		if (sender instanceof Entity)

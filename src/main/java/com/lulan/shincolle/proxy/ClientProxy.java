@@ -172,11 +172,15 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerRender() throws Exception
 	{
+		
+		
+		
+		
 		//init item models
 		ModItems.initModels();
 		
 		//init block models
-		ModBlocks.initModels();
+		ModBlocks.initModels();	
 		
 		//取代mc原本的tesr item renderer, 改為自訂的renderer
 		TileEntityItemStackRenderer.instance = new RenderTileEntityItem();

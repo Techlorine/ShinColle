@@ -113,7 +113,7 @@ public class EntityAIShipRangeAttack extends EntityAIBase
 
     //判定是否繼續AI： 有target就繼續, 或者已經移動完畢就繼續
     @Override
-	public boolean continueExecuting()
+	public boolean shouldContinueExecuting()
     {
     	if (host != null)
     	{
